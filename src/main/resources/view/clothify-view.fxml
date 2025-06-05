@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane prefHeight="734.0" prefWidth="755.0" style="-fx-border-style: solid; -fx-border-color: green; -fx-border-width: 3px;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ClothifyController">
+   <children>
+      <Label layoutX="277.0" layoutY="20.0" text="Admin Interface">
+         <font>
+            <Font name="System Bold Italic" size="28.0" />
+         </font>
+      </Label>
+      <TableView fx:id="tblProduct" layoutX="27.0" layoutY="224.0" prefHeight="200.0" prefWidth="703.0">
+        <columns>
+          <TableColumn fx:id="colProductId" prefWidth="69.60000038146973" text="Id" />
+          <TableColumn fx:id="colProductName" prefWidth="174.4000244140625" text="Name" />
+            <TableColumn fx:id="colSize" prefWidth="51.99993896484375" text="Size" />
+            <TableColumn fx:id="colPrice" prefWidth="135.20001220703125" text="Price" />
+            <TableColumn fx:id="colQty" prefWidth="94.40005493164062" text="Quantity" />
+            <TableColumn fx:id="colImgUrl" prefWidth="180.7999267578125" text="Image_url" />
+        </columns>
+      </TableView>
+      <TableView fx:id="tblEmployee" layoutX="27.0" layoutY="607.0" prefHeight="110.0" prefWidth="614.0">
+         <columns>
+            <TableColumn fx:id="colEmployeeId" prefWidth="73.59997177124023" text="Id" />
+            <TableColumn fx:id="colEmployeeName" prefWidth="215.2000274658203" text="Name" />
+            <TableColumn fx:id="colEmployeeEmail" prefWidth="143.199951171875" text="Email" />
+            <TableColumn fx:id="colEmployeePassword" prefWidth="182.39996337890625" text="Password" />
+         </columns>
+      </TableView>
+      <Label layoutX="34.0" layoutY="78.0" text="Products" textFill="#d9197c">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Label layoutX="27.0" layoutY="451.0" text="Employees" textFill="#d9197c">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <JFXButton fx:id="btnAddProduct" layoutX="387.0" layoutY="191.0" onAction="#btnAddProductOnClick" style="-fx-background-color: pink;" text="Add product" />
+      <JFXButton fx:id="btnRemoveProduct" layoutX="626.0" layoutY="191.0" onAction="#btnRemoveProductOnClick" style="-fx-background-color: pink;" text="Remove product" />
+      <JFXButton fx:id="txtEditProduct" layoutX="489.0" layoutY="191.0" onAction="#btnEditProductOnClick" style="-fx-background-color: pink;" text="Edit product details" />
+      <JFXTextField fx:id="txtProductId" layoutX="34.0" layoutY="110.0" prefHeight="26.0" prefWidth="104.0" promptText="Id" />
+      <JFXTextField fx:id="txtPrice" layoutX="303.0" layoutY="146.0" promptText="Price" />
+      <JFXTextField fx:id="txtSize" layoutX="34.0" layoutY="146.0" promptText="Size" />
+      <JFXTextField fx:id="txtProductName" layoutX="303.0" layoutY="110.0" promptText="Name" />
+      <JFXTextField fx:id="txtQty" layoutX="509.0" layoutY="110.0" promptText="Quantity" />
+      <JFXTextField fx:id="txtProductImageUrl" layoutX="509.0" layoutY="146.0" promptText="Image url" />
+      <JFXButton fx:id="btnAddEmployee" layoutX="380.0" layoutY="568.0" onAction="#btnAddEmployeeOnClick" style="-fx-background-color: pink;" text="Add employee" />
+      <JFXButton fx:id="btnRemoveEmployee" layoutX="619.0" layoutY="568.0" onAction="#btnRemoveEmployeeOnClick" style="-fx-background-color: pink;" text="Remove employee" />
+      <JFXButton fx:id="btnEditEmployee" layoutX="482.0" layoutY="568.0" onAction="#btnEditEmployeeOnClick" style="-fx-background-color: pink;" text="Edit employee details" />
+      <JFXTextField fx:id="txtEmployeeName" layoutX="28.0" layoutY="523.0" promptText="Name" />
+      <JFXTextField fx:id="txtEmployeePassword" layoutX="334.0" layoutY="523.0" promptText="Password" />
+      <JFXTextField fx:id="txtEmployeeEmail" layoutX="180.0" layoutY="523.0" promptText="Email" />
+      <JFXButton fx:id="btnSearchProduct" layoutX="150.0" layoutY="110.0" onAction="#btnSearchProductOnClick" style="-fx-background-color: pink;" text="Search product by Id" />
+      <JFXButton fx:id="btnSearchEmployee" layoutX="138.0" layoutY="486.0" onAction="#btnSearchEmployeeOnClick" prefHeight="26.0" prefWidth="158.0" style="-fx-background-color: pink;" text="Search employee by Id" />
+      <JFXTextField fx:id="txtEmployeeId" layoutX="27.0" layoutY="486.0" prefHeight="26.0" prefWidth="104.0" promptText="Id" />
+   </children>
+</AnchorPane>
