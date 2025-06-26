@@ -1,33 +1,36 @@
 package repository.custom.impl;
 
 import dto.Product;
+import entity.ProductEntity;
+import repository.SuperRepository;
 import repository.custom.ProductRepository;
 
 import java.util.List;
 
-public class ProductRepositoryImpl implements ProductRepository {
+public class ProductRepositoryImpl implements ProductRepository, SuperRepository {
+
     @Override
-    public Boolean addProduct(Product product) {
+    public Boolean add(ProductEntity entity) {
         return null;
     }
 
     @Override
-    public Boolean updateProduct(Product product) {
+    public Boolean update(ProductEntity entity) {
         return null;
     }
 
     @Override
-    public Boolean deleteProduct(int id) {
+    public Boolean delete(Integer integer) {
         return null;
     }
 
     @Override
-    public Product searchProductById(int id) {
+    public ProductEntity searchById(Integer integer) {
         return null;
     }
 
     @Override
-    public List<Product> getAll() {
+    public List<ProductEntity> getAll() {
         return List.of();
     }
 }

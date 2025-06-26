@@ -9,9 +9,9 @@
 <?import javafx.scene.text.Font?>
 
 
-<AnchorPane prefHeight="734.0" prefWidth="755.0" style="-fx-border-style: solid; -fx-border-color: green; -fx-border-width: 3px;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ClothifyController">
+<AnchorPane prefHeight="734.0" prefWidth="755.0" style="-fx-border-style: solid; -fx-border-color: black; -fx-border-width: 3px; -fx-background-color: gray;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdminController">
    <children>
-      <Label layoutX="277.0" layoutY="20.0" text="Admin Interface">
+      <Label layoutX="277.0" layoutY="20.0" text="Admin Interface" textFill="WHITE">
          <font>
             <Font name="System Bold Italic" size="28.0" />
          </font>
@@ -34,14 +34,14 @@
             <TableColumn fx:id="colEmployeePassword" prefWidth="182.39996337890625" text="Password" />
          </columns>
       </TableView>
-      <Label layoutX="34.0" layoutY="78.0" text="Products" textFill="#d9197c">
+      <Label layoutX="34.0" layoutY="78.0" text="Products" textFill="WHITE">
          <font>
-            <Font size="16.0" />
+            <Font name="System Bold" size="16.0" />
          </font>
       </Label>
-      <Label layoutX="27.0" layoutY="451.0" text="Employees" textFill="#d9197c">
+      <Label layoutX="27.0" layoutY="451.0" text="Employees" textFill="WHITE">
          <font>
-            <Font size="16.0" />
+            <Font name="System Bold" size="16.0" />
          </font>
       </Label>
       <JFXButton fx:id="btnAddProduct" layoutX="387.0" layoutY="191.0" onAction="#btnAddProductOnClick" style="-fx-background-color: pink;" text="Add product" />

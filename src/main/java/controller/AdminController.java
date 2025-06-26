@@ -2,7 +2,6 @@ package controller;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
-import db.DBConnection;
 import dto.Employee;
 import dto.Product;
 import javafx.collections.FXCollections;
@@ -14,7 +13,14 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import repository.DAOFactory;
+import service.BoFactory;
+import service.custom.EmployeeService;
+import service.custom.ProductService;
+import service.custom.impl.EmployeeServiceImpl;
+import service.custom.impl.ProductServiceImpl;
 import util.CrudUtil;
+import util.ServiceType;
 
 import java.net.URL;
 import java.sql.*;
@@ -22,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class ClothifyController implements Initializable {
+public class AdminController implements Initializable {
 
     public JFXTextField txtEmployeeId;
     public TableColumn colEmployeeId;
@@ -116,16 +122,51 @@ public class ClothifyController implements Initializable {
     @FXML
     private JFXTextField txtSize;
 
+    EmployeeService employeeService = BoFactory.getInstance().getServiceType(ServiceType.EMPLOYEE);
+    ProductService productService = BoFactory.getInstance().getServiceType(ServiceType.PRODUCT);
 
     public boolean isValidEmail(String email) {
         String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
         return email.matches(emailRegex);
     }
+    private void clearEmployeeFields() {
+        txtEmployeeId.clear();
+        txtEmployeeName.clear();
+        txtEmployeePassword.clear();
+        txtEmployeeEmail.clear();
+        tblEmployee.getSelectionModel().clearSelection();
+    }
 
+    private void clearProductFields(){
+        txtProductId.clear();
+        txtProductName.clear();
+        txtPrice.clear();
+        txtSize.clear();
+        txtProductImageUrl.clear();
+        txtQty.clear();
+        tblProduct.getSelectionModel().clearSelection();
+    }
 
+    public void populateEmployeeFields(Employee employee) {
+        txtEmployeeId.setText(String.valueOf(employee.getId()));
+        txtEmployeeName.setText(employee.getName());
+        txtEmployeeEmail.setText(employee.getEmail());
+        txtEmployeePassword.setText(String.valueOf(employee.getPassword()));
+        txtEmployeeId.setEditable(false);
+    }
+
+    public void populateProductFields(Product product){
+        txtProductId.setText(String.valueOf(product.getId()));
+        txtProductName.setText(product.getName());
+        txtSize.setText(product.getSize());
+        txtPrice.setText(String.valueOf(product.getPrice()));
+        txtQty.setText(String.valueOf(product.getQuantity()));
+        txtProductId.setEditable(false);
+    }
 
     @FXML
     void btnAddEmployeeOnClick(ActionEvent event) {
+        int id = Integer.parseInt(txtEmployeeId.getText());
         String employee_name = txtEmployeeName.getText();
         String email = txtEmployeeEmail.getText();
         String password = txtEmployeePassword.getText();
@@ -144,30 +185,43 @@ public class ClothifyController implements Initializable {
             return;
         }
 
+
         // add duplicate id validation later
-
-
         try {
-            Boolean isAdded= CrudUtil.execute("INSERT INTO employee(name,email,employee_password) VALUES(?,?,?)",employee_name,email,password);
-            if(isAdded){
-                new Alert(Alert.AlertType.INFORMATION,"New employee added successfully!").show();
-            }else {
-                new Alert(Alert.AlertType.ERROR, "Error adding new employee!").show();
+            Employee employee = employeeService.searchEmployeeById(id);
+            if (employee!=null) {
+                new Alert(Alert.AlertType.ERROR, "Employee with ID " + id + " already exists.").show();
+                return;
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            new Alert(Alert.AlertType.ERROR, "Error checking for existing employee: " + e.getMessage()).show();
+            e.printStackTrace(); // Log the error
+            return;
         }
 
-        loadEmployeeTable();
+
+        Employee employee = new Employee(id,employee_name,email,password);
+        Boolean b = employeeService.addEmployee(employee);
+        //Boolean isAdded= CrudUtil.execute("INSERT INTO employee(name,email,employee_password) VALUES(?,?,?)",employee_name,email,password);
+        if(b != null && b){
+            new Alert(Alert.AlertType.INFORMATION,"New employee added successfully!").show();
+            loadEmployeeTable();
+            clearEmployeeFields();
+
+        }else {
+            new Alert(Alert.AlertType.ERROR, "Error adding new employee!").show();
+        }
     }
 
     @FXML
     void btnAddProductOnClick(ActionEvent event) {
+        int id = Integer.parseInt(txtProductId.getText());
         String product_name = txtProductName.getText();
         String size = txtSize.getText();
         String price_text = txtPrice.getText();
         String qty_text = txtQty.getText();
         String img_url = txtProductImageUrl.getText();
+
 
         if(product_name.isEmpty() || size.isEmpty()|| price_text.isEmpty() ||qty_text.isEmpty()|| img_url.isEmpty()){
             new Alert(Alert.AlertType.ERROR,"Please fill all the fields first!").show();
@@ -202,18 +256,30 @@ public class ClothifyController implements Initializable {
         }
 
         try {
-            Boolean isAdded = CrudUtil.execute("INSERT INTO products(product_name,size,price,qty,img_url) VALUES(?,?,?,?,?)", product_name, size, price, qty, img_url);
-            if(isAdded){
-                new Alert(Alert.AlertType.INFORMATION,"New product added successfully!").show();
-            }else {
-                new Alert(Alert.AlertType.ERROR, "Error adding new product!").show();
+            Product product= productService.searchProductById(id);
+            if (product!=null) {
+                new Alert(Alert.AlertType.ERROR, "Product with ID " + id + " already exists.").show();
+                return;
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            new Alert(Alert.AlertType.ERROR, "Error checking for existing product: " + e.getMessage()).show();
+            e.printStackTrace(); // Log the error
+            return;
         }
 
-        loadProductTable();
+        Product product = new Product(id,product_name,size,price,qty,img_url);
+
+        Boolean b = productService.addProduct(product);
+//            Boolean isAdded = CrudUtil.execute("INSERT INTO products(product_name,size,price,qty,img_url) VALUES(?,?,?,?,?)", product_name, size, price, qty, img_url);
+        if(b){
+            new Alert(Alert.AlertType.INFORMATION,"New product added successfully!").show();
+            loadProductTable();
+            clearProductFields();
+        }else {
+            new Alert(Alert.AlertType.ERROR, "Error adding new product!").show();
+        }
     }
+
     @FXML
     void btnEditEmployeeOnClick(ActionEvent event) {
         String employee_name = txtEmployeeName.getText();
@@ -318,18 +384,12 @@ public class ClothifyController implements Initializable {
         int id = Integer.parseInt(txtEmployeeId.getText());
 
         try {
-            ResultSet resultSet = CrudUtil.execute("SELECT * FROM employee WHERE id = ?",id);
+            EmployeeService employeeService = new EmployeeServiceImpl();
 
-            if(resultSet.next()){
-                String name = resultSet.getString("name");
-                String email = resultSet.getString("email");
-                String password = resultSet.getString("employee_password");
-                txtEmployeeName.setText(name);
-                txtEmployeeEmail.setText(email);
-                txtEmployeePassword.setText(String.valueOf(password));
-            }else {
-                new Alert(Alert.AlertType.ERROR,"Employee not found!").show();
-            }
+            Employee employee = employeeService.searchEmployeeById(id);
+
+            populateEmployeeFields(employee);
+
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -342,23 +402,11 @@ public class ClothifyController implements Initializable {
         int id = Integer.parseInt(txtProductId.getText());
 
         try {
-            ResultSet resultSet = CrudUtil.execute("SELECT * FROM products WHERE id = ?",id);
+                ProductService productService = new ProductServiceImpl();
 
-            if(resultSet.next()){
-                String name = resultSet.getString("product_name");
-                String size = resultSet.getString("size");
-                String price = String.valueOf(resultSet.getDouble("price"));
-                String  qty = String.valueOf(resultSet.getInt("qty"));
-                String url = resultSet.getString("img_url");
+                Product product = productService.searchProductById(id);
 
-                txtProductName.setText(name);
-                txtSize.setText(size);
-                txtPrice.setText(price);
-                txtQty.setText(qty);
-                txtProductImageUrl.setText(url);
-            }else {
-                new Alert(Alert.AlertType.ERROR,"Product not found!").show();
-            }
+                populateProductFields(product);
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
