@@ -34,7 +34,7 @@ public class StartupController {
             // Get the FXML file as a resource
             URL resource = getClass().getClassLoader().getResource(fxmlPath);
             if (resource == null) {
-                System.err.println("❌ FXML file not found at: " + fxmlPath);
+                System.out.println("FXML file not found at: " + fxmlPath);
                 return;
             }
 
@@ -53,7 +53,7 @@ public class StartupController {
             currentStage.close();
 
         } catch (IOException e) {
-            System.err.println("❌ Failed to load FXML: " + fxmlPath);
+            System.out.println("Failed to load FXML: " + fxmlPath);
             e.printStackTrace();
         }
     }

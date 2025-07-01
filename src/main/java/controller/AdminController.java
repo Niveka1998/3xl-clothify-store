@@ -152,7 +152,7 @@ public class AdminController implements Initializable {
         txtEmployeeName.setText(employee.getName());
         txtEmployeeEmail.setText(employee.getEmail());
         txtEmployeePassword.setText(String.valueOf(employee.getPassword()));
-        txtEmployeeId.setEditable(false);
+//        txtEmployeeId.setEditable(false);
     }
 
     public void populateProductFields(Product product){
@@ -161,12 +161,13 @@ public class AdminController implements Initializable {
         txtSize.setText(product.getSize());
         txtPrice.setText(String.valueOf(product.getPrice()));
         txtQty.setText(String.valueOf(product.getQuantity()));
-        txtProductId.setEditable(false);
+        txtProductImageUrl.setText(product.getImage_url());
+//        txtProductId.setEditable(false);
     }
 
     @FXML
     void btnAddEmployeeOnClick(ActionEvent event) {
-        int id = Integer.parseInt(txtEmployeeId.getText());
+        String id_text = txtEmployeeId.getText();
         String employee_name = txtEmployeeName.getText();
         String email = txtEmployeeEmail.getText();
         String password = txtEmployeePassword.getText();
@@ -185,9 +186,19 @@ public class AdminController implements Initializable {
             return;
         }
 
-
+        try {
+            int id = Integer.parseInt(txtEmployeeId.getText());
+            if(id<=0){
+                new Alert(Alert.AlertType.ERROR,"ID must be a positive number!").show();
+                return;
+            }
+        }catch (NumberFormatException e){
+            new Alert(Alert.AlertType.ERROR,"Invalid ID. Please enter a positive number.").show();
+            return;
+        }
         // add duplicate id validation later
         try {
+            int id = Integer.parseInt(txtEmployeeId.getText());
             Employee employee = employeeService.searchEmployeeById(id);
             if (employee!=null) {
                 new Alert(Alert.AlertType.ERROR, "Employee with ID " + id + " already exists.").show();
@@ -199,7 +210,7 @@ public class AdminController implements Initializable {
             return;
         }
 
-
+        int id = Integer.parseInt(txtEmployeeId.getText());
         Employee employee = new Employee(id,employee_name,email,password);
         Boolean b = employeeService.addEmployee(employee);
         //Boolean isAdded= CrudUtil.execute("INSERT INTO employee(name,email,employee_password) VALUES(?,?,?)",employee_name,email,password);
@@ -215,7 +226,7 @@ public class AdminController implements Initializable {
 
     @FXML
     void btnAddProductOnClick(ActionEvent event) {
-        int id = Integer.parseInt(txtProductId.getText());
+        String id_text= txtProductId.getText();
         String product_name = txtProductName.getText();
         String size = txtSize.getText();
         String price_text = txtPrice.getText();
@@ -231,6 +242,16 @@ public class AdminController implements Initializable {
             new Alert(Alert.AlertType.ERROR,"Enter a valid size between XS and 5XL").show();
             return;
         }
+        try {
+            int id =Integer.parseInt(txtProductId.getText());
+            if(id<=0){
+                new Alert(Alert.AlertType.ERROR,"ID must be a positive number!").show();
+                return;
+            }
+        }catch (NumberFormatException e){
+            new Alert(Alert.AlertType.ERROR,"Invalid ID. Please enter a positive number.").show();
+            return;
+        }
         double price;
         try {
             price = Double.parseDouble(price_text);
@@ -239,7 +260,7 @@ public class AdminController implements Initializable {
                 return;
             }
         } catch (NumberFormatException e) {
-            new Alert(Alert.AlertType.ERROR, "Invalid price format. Please enter a number.").show();
+            new Alert(Alert.AlertType.ERROR, "Invalid price format. Please enter a positive number.").show();
             return;
         }
 
@@ -256,6 +277,7 @@ public class AdminController implements Initializable {
         }
 
         try {
+            int id =Integer.parseInt(txtProductId.getText());
             Product product= productService.searchProductById(id);
             if (product!=null) {
                 new Alert(Alert.AlertType.ERROR, "Product with ID " + id + " already exists.").show();
@@ -266,7 +288,7 @@ public class AdminController implements Initializable {
             e.printStackTrace(); // Log the error
             return;
         }
-
+        int id =Integer.parseInt(txtProductId.getText());
         Product product = new Product(id,product_name,size,price,qty,img_url);
 
         Boolean b = productService.addProduct(product);
@@ -285,29 +307,52 @@ public class AdminController implements Initializable {
         String employee_name = txtEmployeeName.getText();
         String email = txtEmployeeEmail.getText();
         String password = txtEmployeePassword.getText();
-        int id = Integer.parseInt(txtEmployeeId.getText());
-        try {
-            Boolean isUpdated = CrudUtil.execute("UPDATE employee SET name=?, email=?, employee_password=? WHERE id=?", employee_name, email, password, id);
+        String id_text = txtEmployeeId.getText();
 
-
-            if (isUpdated) {
-                new Alert(Alert.AlertType.INFORMATION, "Employee Updated!").show();
-            } else {
-                new Alert(Alert.AlertType.ERROR, "Employee not updated!").show();
-            }
-
-            loadEmployeeTable();
-
-        } catch (SQLException e) {
-            e.printStackTrace(); // Show full error in console for debugging
-            throw new RuntimeException(e);
+        if(employee_name.isEmpty() || email.isEmpty() || password.isEmpty()){
+            new Alert(Alert.AlertType.ERROR,"Please fill all the fields first!").show();
+            return;
         }
+        if (!password.matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$")) {
+            new Alert(Alert.AlertType.ERROR, "Password must be at least 8 characters, include a letter, a number, and a symbol!").show();
+            return;
+        }
+
+        if (!isValidEmail(email)) {
+            new Alert(Alert.AlertType.ERROR, "Enter a valid email address").show();
+            return;
+        }
+
+        try {
+            int id= Integer.parseInt(txtEmployeeId.getText());
+            if(id<=0){
+                new Alert(Alert.AlertType.ERROR,"ID must be a positive number!").show();
+                return;
+            }
+        }catch (NumberFormatException e){
+            new Alert(Alert.AlertType.ERROR,"Invalid ID. Please enter a positive number.").show();
+            return;
+        }
+        int id = Integer.parseInt(txtEmployeeId.getText());
+        Employee employee = new Employee(id,employee_name,email,password);
+        Boolean b = employeeService.updateEmployee(employee);
+        if(b != null && b){
+            new Alert(Alert.AlertType.INFORMATION,"Employee updated successfully!").show();
+            loadEmployeeTable();
+            clearEmployeeFields();
+
+        }else {
+            new Alert(Alert.AlertType.ERROR, "Error updating employee!").show();
+        }
+
+        loadEmployeeTable();
+        clearEmployeeFields();
 
     }
 
     @FXML
     void btnEditProductOnClick(ActionEvent event) {
-        String id= txtProductId.getText();
+        String id_text= txtProductId.getText();
         String product_name = txtProductName.getText();
         String size = txtSize.getText();
         String price_text = txtPrice.getText();
@@ -324,21 +369,52 @@ public class AdminController implements Initializable {
             return;
         }
         try {
-            Boolean isUpdated = CrudUtil.execute("UPDATE products SET product_name=?, size=?, price=?, qty=?,img_url=? WHERE id=?", product_name, size, price_text, qty_text ,img_url,id);
-
-
-            if (isUpdated) {
-                new Alert(Alert.AlertType.INFORMATION, "Product Updated!").show();
-            } else {
-                new Alert(Alert.AlertType.ERROR, "Product not updated!").show();
+            int id =Integer.parseInt(txtProductId.getText());
+            if(id<=0){
+                new Alert(Alert.AlertType.ERROR,"ID must be a positive number!").show();
+                return;
             }
-
-            loadProductTable();
-
-        } catch (SQLException e) {
-            e.printStackTrace(); // Show full error in console for debugging
-            throw new RuntimeException(e);
+        }catch (NumberFormatException e){
+            new Alert(Alert.AlertType.ERROR,"Invalid ID. Please enter a positive number.").show();
+            return;
         }
+        double price;
+        try {
+            price = Double.parseDouble(price_text);
+            if(price<=0){
+                new Alert(Alert.AlertType.ERROR,"Price must be a positive number!").show();
+                return;
+            }
+        } catch (NumberFormatException e) {
+            new Alert(Alert.AlertType.ERROR, "Invalid price format. Please enter a positive number.").show();
+            return;
+        }
+
+        int qty;
+        try {
+            qty = Integer.parseInt(qty_text);
+            if(qty<=0){
+                new Alert(Alert.AlertType.ERROR,"Quantity must be a positive number!").show();
+                return;
+            }
+        } catch (NumberFormatException e) {
+            new Alert(Alert.AlertType.ERROR, "Invalid quantity format. Please enter a number.").show();
+            return;
+        }
+        int id =Integer.parseInt(txtProductId.getText());
+        Product product = new Product(id,product_name,size,price,qty,img_url);
+
+        Boolean b = productService.updateProduct(product);
+        if(b){
+            new Alert(Alert.AlertType.INFORMATION,"Product updated successfully!").show();
+            loadProductTable();
+            clearProductFields();
+        }else {
+            new Alert(Alert.AlertType.ERROR, "Error updating product!").show();
+        }
+
+        clearProductFields();
+        loadProductTable();
 
 
     }
@@ -355,6 +431,7 @@ public class AdminController implements Initializable {
                 new Alert(Alert.AlertType.ERROR, "Error deleting employee!").show();
             }
             loadEmployeeTable();
+            clearEmployeeFields();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -373,6 +450,7 @@ public class AdminController implements Initializable {
                 new Alert(Alert.AlertType.ERROR, "Error deleting product!").show();
             }
             loadProductTable();
+            clearProductFields();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -381,9 +459,19 @@ public class AdminController implements Initializable {
 
     @FXML
     void btnSearchEmployeeOnClick(ActionEvent event) {
-        int id = Integer.parseInt(txtEmployeeId.getText());
+        try {
+            int id =Integer.parseInt(txtEmployeeId.getText());
+            if(id<=0){
+                new Alert(Alert.AlertType.ERROR,"ID must be a positive number!").show();
+                return;
+            }
+        }catch (NumberFormatException e){
+            new Alert(Alert.AlertType.ERROR,"Invalid ID. Please enter a positive number.").show();
+            return;
+        }
 
         try {
+            int id = Integer.parseInt(txtEmployeeId.getText());
             EmployeeService employeeService = new EmployeeServiceImpl();
 
             Employee employee = employeeService.searchEmployeeById(id);
@@ -392,24 +480,35 @@ public class AdminController implements Initializable {
 
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            new Alert(Alert.AlertType.ERROR,"Employee not found !");
         }
 
     }
 
     @FXML
     void btnSearchProductOnClick(ActionEvent event) {
-        int id = Integer.parseInt(txtProductId.getText());
 
         try {
-                ProductService productService = new ProductServiceImpl();
+            int id = Integer.parseInt(txtProductId.getText());
+            if (id <= 0) {
+                new Alert(Alert.AlertType.ERROR, "ID must be a positive number!").show();
+                return;
+            }
 
-                Product product = productService.searchProductById(id);
+            ProductService productService = new ProductServiceImpl();
+            Product product = productService.searchProductById(id);
 
+            if (product != null) {
                 populateProductFields(product);
+            } else {
+                new Alert(Alert.AlertType.WARNING, "Product not found!").show();
+            }
 
+        } catch (NumberFormatException e) {
+            new Alert(Alert.AlertType.ERROR, "Invalid ID. Please enter a positive number.").show();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace(); // Optional: Log the exception for debugging
+            new Alert(Alert.AlertType.ERROR, "An error occurred while searching for the product.").show();
         }
 
     }

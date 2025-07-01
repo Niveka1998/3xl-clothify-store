@@ -6,10 +6,9 @@ import org.modelmapper.ModelMapper;
 import repository.DAOFactory;
 import repository.custom.EmployeeRepository;
 import service.custom.EmployeeService;
-import util.CrudUtil;
+
 import util.RepositoryType;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,37 +35,18 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Employee searchEmployeeById(int id) throws SQLException {
-        ResultSet resultSet = CrudUtil.execute("SELECT * FROM employee WHERE id = ?", id);
-
-        if (resultSet.next()) {
-            return new Employee(
-                    resultSet.getInt("id"),
-                    resultSet.getString("name"),
-                    resultSet.getString("email"),
-                    resultSet.getString("employee_password")
-            );
-        } else {
-            return null;
-        }
+    public Employee searchEmployeeById(int id) {
+        EmployeeEntity entity = repository.searchById(id);
+        return (entity != null) ? mapper.map(entity, Employee.class) : null;
     }
 
     @Override
     public List<Employee> getAll() {
-        List<Employee> employees = new ArrayList<>();
-        try {
-            ResultSet resultSet = CrudUtil.execute("SELECT * FROM employee");
-            while (resultSet.next()) {
-                employees.add(new Employee(
-                        resultSet.getInt("id"),
-                        resultSet.getString("name"),
-                        resultSet.getString("email"),
-                        resultSet.getString("employee_password")
-                ));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        List<EmployeeEntity> employeeEntities = repository.getAll();
+        List<Employee> employeeList = new ArrayList<>();
+        for(EmployeeEntity entity : employeeEntities){
+            employeeList.add(mapper.map(entity, Employee.class));
         }
-        return employees;
+        return employeeList;
     }
 }

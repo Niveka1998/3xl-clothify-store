@@ -1,8 +1,15 @@
 package service.custom.impl;
 
+import dto.Employee;
 import dto.Product;
+import entity.EmployeeEntity;
+import entity.ProductEntity;
+import org.modelmapper.ModelMapper;
+import repository.DAOFactory;
+import repository.custom.ProductRepository;
 import service.custom.ProductService;
 import util.CrudUtil;
+import util.RepositoryType;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,87 +18,39 @@ import java.util.List;
 
 public class ProductServiceImpl implements ProductService {
 
+    ProductRepository repository = DAOFactory.getInstance().getRepositoryType(RepositoryType.PRODUCT);
+    ModelMapper mapper = new ModelMapper();
+
     @Override
     public Boolean addProduct(Product product) {
-        try {
-            return CrudUtil.execute(
-                    "INSERT INTO products (id, product_name, size, price, qty, img_url) VALUES (?, ?, ?, ?, ?, ?)",
-                    product.getId(),
-                    product.getName(),
-                    product.getSize(),
-                    product.getPrice(),
-                    product.getQuantity(),
-                    product.getImage_url()
-            );
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
+        ProductEntity entity = mapper.map(product, ProductEntity.class);
+        return repository.add(entity);
     }
 
     @Override
     public Boolean updateProduct(Product product) {
-        try {
-            return CrudUtil.execute(
-                    "UPDATE products SET product_name = ?, size = ?, price = ?, qty = ?, img_url = ? WHERE id = ?",
-                    product.getName(),
-                    product.getSize(),
-                    product.getPrice(),
-                    product.getQuantity(),
-                    product.getImage_url(),
-                    product.getId()
-            );
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
+        ProductEntity entity = mapper.map(product, ProductEntity.class);
+        return repository.update(entity);
     }
 
     @Override
     public Boolean deleteProduct(int id) {
-        try {
-            return CrudUtil.execute("DELETE FROM products WHERE id = ?", id);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
+        return repository.delete(id);
     }
 
     @Override
-    public Product searchProductById(int id) throws SQLException {
-        ResultSet resultSet = CrudUtil.execute("SELECT * FROM products WHERE id = ?", id);
-        if (resultSet.next()) {
-            return new Product(
-                    resultSet.getInt("id"),
-                    resultSet.getString("product_name"),
-                    resultSet.getString("size"),
-                    resultSet.getDouble("price"),
-                    resultSet.getInt("qty"),
-                    resultSet.getString("img_url")
-            );
-        } else {
-            return null;
-        }
+    public Product searchProductById(int id)  {
+        ProductEntity entity = repository.searchById(id);
+        return (entity != null) ? mapper.map(entity, Product.class) : null;
     }
 
     @Override
     public List<Product> getAll() {
-        List<Product> products = new ArrayList<>();
-        try {
-            ResultSet rs = CrudUtil.execute("SELECT * FROM products");
-            while (rs.next()) {
-                products.add(new Product(
-                        rs.getInt("id"),
-                        rs.getString("product_name"),
-                        rs.getString("size"),
-                        rs.getDouble("price"),
-                        rs.getInt("qty"),
-                        rs.getString("img_url")
-                ));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        List<ProductEntity> productEntities = repository.getAll();
+        List<Product> productList = new ArrayList<>();
+        for(ProductEntity entity: productEntities){
+            productList.add(mapper.map(entity, Product.class));
         }
-        return products;
+        return productList;
     }
 }
