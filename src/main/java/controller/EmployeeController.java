@@ -7,6 +7,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -17,12 +18,14 @@ import service.custom.impl.ProductServiceImpl;
 import util.CrudUtil;
 import util.ServiceType;
 
+import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
-public class EmployeeController {
+public class EmployeeController implements Initializable {
 
     @FXML
     private JFXButton btnAddProduct;
@@ -87,9 +90,19 @@ public class EmployeeController {
         tblProduct.getSelectionModel().clearSelection();
     }
 
+    public void populateProductFields(Product product){
+        txtProductId.setText(String.valueOf(product.getId()));
+        txtProductName.setText(product.getName());
+        txtSize.setText(product.getSize());
+        txtPrice.setText(String.valueOf(product.getPrice()));
+        txtQty.setText(String.valueOf(product.getQuantity()));
+        txtProductImageUrl.setText(product.getImage_url());
+//        txtProductId.setEditable(false);
+    }
+
     @FXML
     void btnAddProductOnClick(ActionEvent event) {
-        int id = Integer.parseInt(txtProductId.getText());
+        String id_text= txtProductId.getText();
         String product_name = txtProductName.getText();
         String size = txtSize.getText();
         String price_text = txtPrice.getText();
@@ -105,6 +118,16 @@ public class EmployeeController {
             new Alert(Alert.AlertType.ERROR,"Enter a valid size between XS and 5XL").show();
             return;
         }
+        try {
+            int id =Integer.parseInt(txtProductId.getText());
+            if(id<=0){
+                new Alert(Alert.AlertType.ERROR,"ID must be a positive number!").show();
+                return;
+            }
+        }catch (NumberFormatException e){
+            new Alert(Alert.AlertType.ERROR,"Invalid ID. Please enter a positive number.").show();
+            return;
+        }
         double price;
         try {
             price = Double.parseDouble(price_text);
@@ -113,7 +136,7 @@ public class EmployeeController {
                 return;
             }
         } catch (NumberFormatException e) {
-            new Alert(Alert.AlertType.ERROR, "Invalid price format. Please enter a number.").show();
+            new Alert(Alert.AlertType.ERROR, "Invalid price format. Please enter a positive number.").show();
             return;
         }
 
@@ -130,6 +153,7 @@ public class EmployeeController {
         }
 
         try {
+            int id =Integer.parseInt(txtProductId.getText());
             Product product= productService.searchProductById(id);
             if (product!=null) {
                 new Alert(Alert.AlertType.ERROR, "Product with ID " + id + " already exists.").show();
@@ -140,7 +164,7 @@ public class EmployeeController {
             e.printStackTrace(); // Log the error
             return;
         }
-
+        int id =Integer.parseInt(txtProductId.getText());
         Product product = new Product(id,product_name,size,price,qty,img_url);
 
         Boolean b = productService.addProduct(product);
@@ -156,7 +180,7 @@ public class EmployeeController {
 
     @FXML
     void btnEditProductOnClick(ActionEvent event) {
-        String id= txtProductId.getText();
+        String id_text= txtProductId.getText();
         String product_name = txtProductName.getText();
         String size = txtSize.getText();
         String price_text = txtPrice.getText();
@@ -173,22 +197,52 @@ public class EmployeeController {
             return;
         }
         try {
-            Boolean isUpdated = CrudUtil.execute("UPDATE products SET product_name=?, size=?, price=?, qty=?,img_url=? WHERE id=?", product_name, size, price_text, qty_text ,img_url,id);
-
-
-            if (isUpdated) {
-                new Alert(Alert.AlertType.INFORMATION, "Product Updated!").show();
-            } else {
-                new Alert(Alert.AlertType.ERROR, "Product not updated!").show();
+            int id =Integer.parseInt(txtProductId.getText());
+            if(id<=0){
+                new Alert(Alert.AlertType.ERROR,"ID must be a positive number!").show();
+                return;
             }
-
-            loadProductTable();
-
-        } catch (SQLException e) {
-            e.printStackTrace(); // Show full error in console for debugging
-            throw new RuntimeException(e);
+        }catch (NumberFormatException e){
+            new Alert(Alert.AlertType.ERROR,"Invalid ID. Please enter a positive number.").show();
+            return;
+        }
+        double price;
+        try {
+            price = Double.parseDouble(price_text);
+            if(price<=0){
+                new Alert(Alert.AlertType.ERROR,"Price must be a positive number!").show();
+                return;
+            }
+        } catch (NumberFormatException e) {
+            new Alert(Alert.AlertType.ERROR, "Invalid price format. Please enter a positive number.").show();
+            return;
         }
 
+        int qty;
+        try {
+            qty = Integer.parseInt(qty_text);
+            if(qty<=0){
+                new Alert(Alert.AlertType.ERROR,"Quantity must be a positive number!").show();
+                return;
+            }
+        } catch (NumberFormatException e) {
+            new Alert(Alert.AlertType.ERROR, "Invalid quantity format. Please enter a number.").show();
+            return;
+        }
+        int id =Integer.parseInt(txtProductId.getText());
+        Product product = new Product(id,product_name,size,price,qty,img_url);
+
+        Boolean b = productService.updateProduct(product);
+        if(b){
+            new Alert(Alert.AlertType.INFORMATION,"Product updated successfully!").show();
+            loadProductTable();
+            clearProductFields();
+        }else {
+            new Alert(Alert.AlertType.ERROR, "Error updating product!").show();
+        }
+
+        clearProductFields();
+        loadProductTable();
 
 
     }
@@ -205,6 +259,7 @@ public class EmployeeController {
                 new Alert(Alert.AlertType.ERROR, "Error deleting product!").show();
             }
             loadProductTable();
+            clearProductFields();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -213,29 +268,32 @@ public class EmployeeController {
 
     @FXML
     void btnSearchProductOnClick(ActionEvent event) {
-        int id = Integer.parseInt(txtProductId.getText());
 
         try {
-            ProductService productService = new ProductServiceImpl();
+            int id = Integer.parseInt(txtProductId.getText());
+            if (id <= 0) {
+                new Alert(Alert.AlertType.ERROR, "ID must be a positive number!").show();
+                return;
+            }
 
+            ProductService productService = new ProductServiceImpl();
             Product product = productService.searchProductById(id);
 
-            populateProductFields(product);
+            if (product != null) {
+                populateProductFields(product);
+            } else {
+                new Alert(Alert.AlertType.WARNING, "Product not found!").show();
+            }
 
+        } catch (NumberFormatException e) {
+            new Alert(Alert.AlertType.ERROR, "Invalid ID. Please enter a positive number.").show();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace(); // Optional: Log the exception for debugging
+            new Alert(Alert.AlertType.ERROR, "An error occurred while searching for the product.").show();
         }
 
     }
 
-    public void populateProductFields(Product product){
-        txtProductId.setText(String.valueOf(product.getId()));
-        txtProductName.setText(product.getName());
-        txtSize.setText(product.getSize());
-        txtPrice.setText(String.valueOf(product.getPrice()));
-        txtQty.setText(String.valueOf(product.getQuantity()));
-        txtProductId.setEditable(false);
-    }
     List<Product> productList=  new ArrayList<>(); // arraylist to store products
     private void loadProductTable() {
         productList.clear();
@@ -272,4 +330,8 @@ public class EmployeeController {
     }
 
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        loadProductTable();
+    }
 }
