@@ -9,9 +9,9 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LoginController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #88aad2;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LoginController">
    <children>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#0c8981" height="91.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="0.0" width="600.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" height="91.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="0.0" width="600.0" />
       <Label layoutX="161.0" layoutY="26.0" text="EMPLOYEE LOGIN FORM" textFill="WHITE">
          <font>
             <Font name="System Bold Italic" size="26.0" />
@@ -39,6 +39,9 @@
             <Font name="System Bold Italic" size="12.0" />
          </font>
       </JFXButton>
-      <Hyperlink fx:id="linkForgotPwdEmpl" layoutX="249.0" layoutY="343.0" onAction="#linkForgotPwdOnActionEmpl" text="Forgot password?" />
+      <Hyperlink fx:id="linkForgotPwdEmpl" layoutX="249.0" layoutY="343.0" onAction="#linkForgotPwdOnActionEmpl" text="Forgot password?" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></Hyperlink>
    </children>
 </AnchorPane>

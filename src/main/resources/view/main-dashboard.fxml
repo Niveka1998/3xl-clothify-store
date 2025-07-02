@@ -8,18 +8,18 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: lightGray;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.DashboardFormController">
    <children>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#c79ab5" height="404.0" stroke="WHITE" strokeType="INSIDE" width="217.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" height="404.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="0.0" width="217.0" />
       <Label layoutX="7.0" layoutY="14.0" prefHeight="90.0" prefWidth="202.0" text="3XL CLOTHING STORE" textAlignment="CENTER" textFill="WHITE" wrapText="true">
          <font>
-            <Font name="Consolas" size="25.0" />
+            <Font name="Consolas Bold" size="25.0" />
          </font>
       </Label>
-      <JFXButton layoutX="59.0" layoutY="134.0" onAction="#btnAdminLoginFormOnClick" style="-fx-background-color: darkcyan;" text="ADMIN LOGIN" textFill="WHITE">
+      <JFXButton layoutX="59.0" layoutY="134.0" onAction="#btnAdminLoginFormOnClick" style="-fx-background-color: #88aad2;" text="ADMIN LOGIN" textFill="WHITE">
          <font>
             <Font name="System Bold Italic" size="12.0" />
          </font>
       </JFXButton>
-      <JFXButton layoutX="50.0" layoutY="200.0" onAction="#btnEmployeeLoginFormOnAction" style="-fx-background-color: darkcyan;" text="EMPLOYEE LOGIN" textFill="WHITE">
+      <JFXButton layoutX="50.0" layoutY="200.0" onAction="#btnEmployeeLoginFormOnAction" style="-fx-background-color: #88aad2;" text="EMPLOYEE LOGIN" textFill="WHITE">
          <font>
             <Font name="System Bold Italic" size="12.0" />
          </font>

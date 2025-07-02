@@ -8,8 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane prefHeight="734.0" prefWidth="755.0" style="-fx-border-style: solid; -fx-border-color: black; -fx-border-width: 3px; -fx-background-color: gray;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdminController">
+<AnchorPane prefHeight="734.0" prefWidth="755.0" style="-fx-border-style: solid; -fx-border-color: black; -fx-border-width: 3px; -fx-background-color: #88aad2;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdminController">
    <children>
       <Label layoutX="277.0" layoutY="20.0" text="Admin Interface" textFill="WHITE">
          <font>
@@ -44,23 +43,47 @@
             <Font name="System Bold" size="16.0" />
          </font>
       </Label>
-      <JFXButton fx:id="btnAddProduct" layoutX="387.0" layoutY="191.0" onAction="#btnAddProductOnClick" style="-fx-background-color: pink;" text="Add product" />
-      <JFXButton fx:id="btnRemoveProduct" layoutX="626.0" layoutY="191.0" onAction="#btnRemoveProductOnClick" style="-fx-background-color: pink;" text="Remove product" />
-      <JFXButton fx:id="txtEditProduct" layoutX="489.0" layoutY="191.0" onAction="#btnEditProductOnClick" style="-fx-background-color: pink;" text="Edit product details" />
-      <JFXTextField fx:id="txtProductId" layoutX="34.0" layoutY="110.0" prefHeight="26.0" prefWidth="104.0" promptText="Id" />
-      <JFXTextField fx:id="txtPrice" layoutX="303.0" layoutY="146.0" promptText="Price" />
-      <JFXTextField fx:id="txtSize" layoutX="34.0" layoutY="146.0" promptText="Size" />
-      <JFXTextField fx:id="txtProductName" layoutX="303.0" layoutY="110.0" promptText="Name" />
-      <JFXTextField fx:id="txtQty" layoutX="509.0" layoutY="110.0" promptText="Quantity" />
-      <JFXTextField fx:id="txtProductImageUrl" layoutX="509.0" layoutY="146.0" promptText="Image url" />
-      <JFXButton fx:id="btnAddEmployee" layoutX="380.0" layoutY="568.0" onAction="#btnAddEmployeeOnClick" style="-fx-background-color: pink;" text="Add employee" />
-      <JFXButton fx:id="btnRemoveEmployee" layoutX="619.0" layoutY="568.0" onAction="#btnRemoveEmployeeOnClick" style="-fx-background-color: pink;" text="Remove employee" />
-      <JFXButton fx:id="btnEditEmployee" layoutX="482.0" layoutY="568.0" onAction="#btnEditEmployeeOnClick" style="-fx-background-color: pink;" text="Edit employee details" />
-      <JFXTextField fx:id="txtEmployeeName" layoutX="28.0" layoutY="523.0" promptText="Name" />
-      <JFXTextField fx:id="txtEmployeePassword" layoutX="334.0" layoutY="523.0" promptText="Password" />
-      <JFXTextField fx:id="txtEmployeeEmail" layoutX="180.0" layoutY="523.0" promptText="Email" />
-      <JFXButton fx:id="btnSearchProduct" layoutX="150.0" layoutY="110.0" onAction="#btnSearchProductOnClick" style="-fx-background-color: pink;" text="Search product by Id" />
-      <JFXButton fx:id="btnSearchEmployee" layoutX="138.0" layoutY="486.0" onAction="#btnSearchEmployeeOnClick" prefHeight="26.0" prefWidth="158.0" style="-fx-background-color: pink;" text="Search employee by Id" />
-      <JFXTextField fx:id="txtEmployeeId" layoutX="27.0" layoutY="486.0" prefHeight="26.0" prefWidth="104.0" promptText="Id" />
+      <JFXButton fx:id="btnAddProduct" layoutX="387.0" layoutY="191.0" onAction="#btnAddProductOnClick" style="-fx-background-color: black;" text="Add product" textFill="WHITE">
+         <font>
+            <Font name="System Bold Italic" size="12.0" />
+         </font></JFXButton>
+      <JFXButton fx:id="btnRemoveProduct" layoutX="626.0" layoutY="191.0" onAction="#btnRemoveProductOnClick" style="-fx-background-color: black;" text="Remove product" textFill="WHITE">
+         <font>
+            <Font name="System Bold Italic" size="12.0" />
+         </font></JFXButton>
+      <JFXButton fx:id="txtEditProduct" layoutX="489.0" layoutY="191.0" onAction="#btnEditProductOnClick" style="-fx-background-color: black;" text="Edit product details" textFill="WHITE">
+         <font>
+            <Font name="System Bold Italic" size="12.0" />
+         </font></JFXButton>
+      <JFXTextField fx:id="txtProductId" layoutX="34.0" layoutY="110.0" prefHeight="26.0" prefWidth="104.0" promptText="Id" unFocusColor="WHITE" />
+      <JFXTextField fx:id="txtPrice" layoutX="303.0" layoutY="146.0" promptText="Price" unFocusColor="WHITE" />
+      <JFXTextField fx:id="txtSize" layoutX="34.0" layoutY="146.0" promptText="Size" unFocusColor="WHITE" />
+      <JFXTextField fx:id="txtProductName" layoutX="303.0" layoutY="110.0" promptText="Name" unFocusColor="WHITE" />
+      <JFXTextField fx:id="txtQty" layoutX="509.0" layoutY="110.0" promptText="Quantity" unFocusColor="WHITE" />
+      <JFXTextField fx:id="txtProductImageUrl" layoutX="509.0" layoutY="146.0" promptText="Image url" unFocusColor="WHITE" />
+      <JFXButton fx:id="btnAddEmployee" layoutX="371.0" layoutY="568.0" onAction="#btnAddEmployeeOnClick" style="-fx-background-color: black;" text="Add employee" textFill="WHITE">
+         <font>
+            <Font name="System Bold Italic" size="12.0" />
+         </font></JFXButton>
+      <JFXButton fx:id="btnRemoveEmployee" layoutX="619.0" layoutY="568.0" onAction="#btnRemoveEmployeeOnClick" style="-fx-background-color: black;" text="Remove employee" textFill="WHITE">
+         <font>
+            <Font name="System Bold Italic" size="12.0" />
+         </font></JFXButton>
+      <JFXButton fx:id="btnEditEmployee" layoutX="473.0" layoutY="568.0" onAction="#btnEditEmployeeOnClick" style="-fx-background-color: black;" text="Edit employee details" textFill="WHITE">
+         <font>
+            <Font name="System Bold Italic" size="12.0" />
+         </font></JFXButton>
+      <JFXTextField fx:id="txtEmployeeName" layoutX="28.0" layoutY="523.0" promptText="Name" unFocusColor="WHITE" />
+      <JFXTextField fx:id="txtEmployeePassword" layoutX="334.0" layoutY="523.0" promptText="Password" unFocusColor="WHITE" />
+      <JFXTextField fx:id="txtEmployeeEmail" layoutX="180.0" layoutY="523.0" promptText="Email" unFocusColor="WHITE" />
+      <JFXButton fx:id="btnSearchProduct" layoutX="150.0" layoutY="110.0" onAction="#btnSearchProductOnClick" style="-fx-background-color: black;" text="Search product by Id" textFill="WHITE">
+         <font>
+            <Font name="System Bold Italic" size="12.0" />
+         </font></JFXButton>
+      <JFXButton fx:id="btnSearchEmployee" layoutX="138.0" layoutY="486.0" onAction="#btnSearchEmployeeOnClick" prefHeight="26.0" prefWidth="158.0" style="-fx-background-color: black;" text="Search employee by Id" textFill="WHITE">
+         <font>
+            <Font name="System Bold Italic" size="12.0" />
+         </font></JFXButton>
+      <JFXTextField fx:id="txtEmployeeId" layoutX="27.0" layoutY="486.0" prefHeight="26.0" prefWidth="104.0" promptText="Id" unFocusColor="WHITE" />
    </children>
 </AnchorPane>
