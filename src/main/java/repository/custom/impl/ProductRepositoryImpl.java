@@ -17,13 +17,14 @@ public class ProductRepositoryImpl implements ProductRepository, SuperRepository
     public Boolean add(ProductEntity entity) {
         try {
             return CrudUtil.execute(
-                    "INSERT INTO products (id, product_name, size, price, qty, img_url) VALUES (?, ?, ?, ?, ?, ?)",
+                    "INSERT INTO products (id, product_name, size, price, available_stock,supplier, category) VALUES (?, ?, ?, ?, ?, ?,?)",
                     entity.getId(),
                     entity.getName(),
                     entity.getSize(),
                     entity.getPrice(),
                     entity.getQuantity(),
-                    entity.getImage_url()
+                    entity.getSupplier(),
+                    entity.getCategory()
             );
         } catch (SQLException e) {
             e.printStackTrace();
@@ -35,12 +36,13 @@ public class ProductRepositoryImpl implements ProductRepository, SuperRepository
     public Boolean update(ProductEntity entity) {
         try {
             return CrudUtil.execute(
-                    "UPDATE products SET product_name = ?, size = ?, price = ?, qty = ?, img_url = ? WHERE id = ?",
+                    "UPDATE products SET product_name = ?, size = ?, price = ?, available_stock = ?, supplier = ? , category = ? WHERE id = ?",
                     entity.getName(),
                     entity.getSize(),
                     entity.getPrice(),
                     entity.getQuantity(),
-                    entity.getImage_url(),
+                    entity.getSupplier(),
+                    entity.getCategory(),
                     entity.getId()
             );
         } catch (SQLException e) {
@@ -69,8 +71,9 @@ public class ProductRepositoryImpl implements ProductRepository, SuperRepository
                         resultSet.getString("product_name"),
                         resultSet.getString("size"),
                         resultSet.getDouble("price"),
-                        resultSet.getInt("qty"),
-                        resultSet.getString("img_url")
+                        resultSet.getInt("available_stock"),
+                        resultSet.getString("supplier"),
+                        resultSet.getString("category")
                 );
             } else {
                 return null;
@@ -93,8 +96,9 @@ public class ProductRepositoryImpl implements ProductRepository, SuperRepository
                         resultSet.getString("product_name"),
                         resultSet.getString("size"),
                         resultSet.getDouble("price"),
-                        resultSet.getInt("qty"),
-                        resultSet.getString("img_url")
+                        resultSet.getInt("available_stock"),
+                        resultSet.getString("supplier"),
+                        resultSet.getString("category")
                 ));
             }
         }catch (SQLException e){
@@ -102,4 +106,14 @@ public class ProductRepositoryImpl implements ProductRepository, SuperRepository
         }
         return list;
     }
+
+    @Override
+    public boolean updateQuantity(int productId, int newQty) throws SQLException {
+        return CrudUtil.execute(
+                "UPDATE products SET available_stock = ? WHERE id = ?",
+                newQty,
+                productId
+        );
+    }
+
 }

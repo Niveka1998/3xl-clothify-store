@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="734.0" prefWidth="755.0" style="-fx-border-style: solid; -fx-border-color: black; -fx-border-width: 3px; -fx-background-color: #88aad2;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdminController">
+<AnchorPane prefHeight="753.0" prefWidth="1557.0" style="-fx-border-style: solid; -fx-border-color: black; -fx-border-width: 3px; -fx-background-color: #88aad2;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdminController">
    <children>
       <Label layoutX="277.0" layoutY="20.0" text="Admin Interface" textFill="WHITE">
          <font>
@@ -17,15 +17,16 @@
       </Label>
       <TableView fx:id="tblProduct" layoutX="27.0" layoutY="224.0" prefHeight="200.0" prefWidth="703.0">
         <columns>
-          <TableColumn fx:id="colProductId" prefWidth="69.60000038146973" text="Id" />
-          <TableColumn fx:id="colProductName" prefWidth="174.4000244140625" text="Name" />
-            <TableColumn fx:id="colSize" prefWidth="51.99993896484375" text="Size" />
-            <TableColumn fx:id="colPrice" prefWidth="135.20001220703125" text="Price" />
-            <TableColumn fx:id="colQty" prefWidth="94.40005493164062" text="Quantity" />
-            <TableColumn fx:id="colImgUrl" prefWidth="180.7999267578125" text="Image_url" />
+          <TableColumn fx:id="colProductId" prefWidth="54.39999198913574" text="Id" />
+          <TableColumn fx:id="colProductName" prefWidth="162.4000015258789" text="Name" />
+            <TableColumn fx:id="colSize" prefWidth="60.79998779296875" text="Size" />
+            <TableColumn fx:id="colPrice" prefWidth="102.39996337890625" text="Price" />
+            <TableColumn fx:id="colQty" prefWidth="99.199951171875" text="Available qty" />
+            <TableColumn fx:id="colCategory" prefWidth="102.39993286132812" text="category" />
+            <TableColumn fx:id="colSupplier" prefWidth="119.2000732421875" text="Supplier Name" />
         </columns>
       </TableView>
-      <TableView fx:id="tblEmployee" layoutX="27.0" layoutY="607.0" prefHeight="110.0" prefWidth="614.0">
+      <TableView fx:id="tblEmployee" layoutX="27.0" layoutY="607.0" prefHeight="118.0" prefWidth="614.0">
          <columns>
             <TableColumn fx:id="colEmployeeId" prefWidth="73.59997177124023" text="Id" />
             <TableColumn fx:id="colEmployeeName" prefWidth="215.2000274658203" text="Name" />
@@ -43,7 +44,7 @@
             <Font name="System Bold" size="16.0" />
          </font>
       </Label>
-      <JFXButton fx:id="btnAddProduct" layoutX="387.0" layoutY="191.0" onAction="#btnAddProductOnClick" style="-fx-background-color: black;" text="Add product" textFill="WHITE">
+      <JFXButton fx:id="btnAddNewStock" layoutX="383.0" layoutY="191.0" onAction="#btnAddNewStockOnClick" style="-fx-background-color: black;" text="Add new stock" textFill="WHITE">
          <font>
             <Font name="System Bold Italic" size="12.0" />
          </font></JFXButton>
@@ -56,11 +57,11 @@
             <Font name="System Bold Italic" size="12.0" />
          </font></JFXButton>
       <JFXTextField fx:id="txtProductId" layoutX="34.0" layoutY="110.0" prefHeight="26.0" prefWidth="104.0" promptText="Id" unFocusColor="WHITE" />
-      <JFXTextField fx:id="txtPrice" layoutX="303.0" layoutY="146.0" promptText="Price" unFocusColor="WHITE" />
+      <JFXTextField fx:id="txtPrice" layoutX="180.0" layoutY="146.0" promptText="Price" unFocusColor="WHITE" />
       <JFXTextField fx:id="txtSize" layoutX="34.0" layoutY="146.0" promptText="Size" unFocusColor="WHITE" />
-      <JFXTextField fx:id="txtProductName" layoutX="303.0" layoutY="110.0" promptText="Name" unFocusColor="WHITE" />
+      <JFXTextField fx:id="txtProductName" layoutX="334.0" layoutY="110.0" promptText="Name" unFocusColor="WHITE" />
       <JFXTextField fx:id="txtQty" layoutX="509.0" layoutY="110.0" promptText="Quantity" unFocusColor="WHITE" />
-      <JFXTextField fx:id="txtProductImageUrl" layoutX="509.0" layoutY="146.0" promptText="Image url" unFocusColor="WHITE" />
+      <JFXTextField fx:id="txtProductCategory" layoutX="509.0" layoutY="146.0" promptText="Category" unFocusColor="WHITE" />
       <JFXButton fx:id="btnAddEmployee" layoutX="371.0" layoutY="568.0" onAction="#btnAddEmployeeOnClick" style="-fx-background-color: black;" text="Add employee" textFill="WHITE">
          <font>
             <Font name="System Bold Italic" size="12.0" />
@@ -85,5 +86,55 @@
             <Font name="System Bold Italic" size="12.0" />
          </font></JFXButton>
       <JFXTextField fx:id="txtEmployeeId" layoutX="27.0" layoutY="486.0" prefHeight="26.0" prefWidth="104.0" promptText="Id" unFocusColor="WHITE" />
+      <TableView fx:id="tblSupplier" layoutX="807.0" layoutY="226.0" prefHeight="110.0" prefWidth="722.0">
+         <columns>
+            <TableColumn fx:id="colSupplierId" prefWidth="73.59997177124023" text="Id" />
+            <TableColumn fx:id="colSupplierName" prefWidth="191.99999237060547" text="Name" />
+            <TableColumn fx:id="colSupplierEmail" prefWidth="159.20001220703125" text="Email" />
+            <TableColumn fx:id="colSupplierCompany" prefWidth="166.40005493164062" text="Company" />
+            <TableColumn fx:id="colSupplierItem" prefWidth="126.40008544921875" text="Item" />
+         </columns>
+      </TableView>
+      <Label layoutX="807.0" layoutY="70.0" text="Suppliers" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font>
+      </Label>
+      <JFXButton fx:id="btnAddSupplier" layoutX="1151.0" layoutY="187.0" onAction="#btnAddSupplierOnClick" style="-fx-background-color: black;" text="Add supplier" textFill="WHITE">
+         <font>
+            <Font name="System Bold Italic" size="12.0" />
+         </font>
+      </JFXButton>
+      <JFXButton fx:id="btnRemoveSupplier" layoutX="1399.0" layoutY="187.0" onAction="#btnRemoveSupplierOnClick" style="-fx-background-color: black;" text="Remove supplier" textFill="WHITE">
+         <font>
+            <Font name="System Bold Italic" size="12.0" />
+         </font>
+      </JFXButton>
+      <JFXButton fx:id="btnEditSupplier" layoutX="1253.0" layoutY="187.0" onAction="#btnEditSupplierOnClick" style="-fx-background-color: black;" text="Edit supplier details" textFill="WHITE">
+         <font>
+            <Font name="System Bold Italic" size="12.0" />
+         </font>
+      </JFXButton>
+      <JFXTextField fx:id="txtSupplierName" layoutX="808.0" layoutY="142.0" promptText="Name" unFocusColor="WHITE" />
+      <JFXTextField fx:id="txtSupplierCompany" layoutX="1114.0" layoutY="142.0" promptText="Company" unFocusColor="WHITE" />
+      <JFXTextField fx:id="txtSupplierEmail" layoutX="960.0" layoutY="142.0" promptText="Email" unFocusColor="WHITE" />
+      <JFXButton fx:id="btnSearchSupplier" layoutX="918.0" layoutY="105.0" onAction="#btnSearchSupplierOnClick" prefHeight="26.0" prefWidth="158.0" style="-fx-background-color: black;" text="Search supplier by Id" textFill="WHITE">
+         <font>
+            <Font name="System Bold Italic" size="12.0" />
+         </font>
+      </JFXButton>
+      <JFXTextField fx:id="txtSupplierId" layoutX="807.0" layoutY="105.0" prefHeight="26.0" prefWidth="104.0" promptText="Id" unFocusColor="WHITE" />
+      <JFXTextField fx:id="txtSupplierItem" layoutX="1264.0" layoutY="142.0" promptText="Item" unFocusColor="WHITE" />
+      <JFXButton fx:id="btnAddProduct" layoutX="160.0" layoutY="191.0" onAction="#btnAddProductOnClick" style="-fx-background-color: black;" text="Add new product" textFill="WHITE">
+         <font>
+            <Font name="System Bold Italic" size="12.0" />
+         </font>
+      </JFXButton>
+      <JFXTextField fx:id="txtSupplier" layoutX="334.0" layoutY="146.0" promptText="Supplier" unFocusColor="WHITE" />
+      <JFXButton fx:id="btnReduceStock" layoutX="281.0" layoutY="191.0" onAction="#btnReduceStockOnClick" style="-fx-background-color: black;" text="Reduce stock" textFill="WHITE">
+         <font>
+            <Font name="System Bold Italic" size="12.0" />
+         </font>
+      </JFXButton>
    </children>
 </AnchorPane>

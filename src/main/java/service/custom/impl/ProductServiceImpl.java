@@ -7,6 +7,7 @@ import entity.ProductEntity;
 import org.modelmapper.ModelMapper;
 import repository.DAOFactory;
 import repository.custom.ProductRepository;
+import repository.custom.impl.ProductRepositoryImpl;
 import service.custom.ProductService;
 import util.CrudUtil;
 import util.RepositoryType;
@@ -53,4 +54,11 @@ public class ProductServiceImpl implements ProductService {
         }
         return productList;
     }
+    private final ProductRepository productRepository = new ProductRepositoryImpl();
+
+    @Override
+    public boolean updateProductQuantity(int productId, int newQty) throws SQLException {
+        return productRepository.updateQuantity(productId, newQty);
+    }
+
 }

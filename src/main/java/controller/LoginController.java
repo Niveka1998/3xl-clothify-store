@@ -6,6 +6,9 @@ import com.jfoenix.controls.JFXTextField;
 import dto.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Hyperlink;
 import javafx.stage.Stage;
@@ -85,13 +88,42 @@ public class LoginController {
 
     @FXML
     void linkForgotPwdOnAction(ActionEvent event) {
-
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/view/update-password.fxml"));
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Reset Password");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
 
 
     @FXML
     void btnEmployeeCreateAccountOnClick(ActionEvent event) {
+        String email = txtEmployeeEmail.getText();
+        String password = txtEmployeePassword.getText();
 
+        if (email.isEmpty() || password.isEmpty()) {
+            new Alert(Alert.AlertType.ERROR, "Please enter email and password to create employee account").show();
+            return;
+        }
+
+        try {
+            boolean result = userService.register(new User(email, password, "EMPLOYEE"));
+            if (result) {
+                new Alert(Alert.AlertType.INFORMATION, "Employee account created successfully!").show();
+                Stage stage = (Stage) btnEmployeeLogin.getScene().getWindow();
+                SceneSwitcher.switchScene(stage, "/view/employee-interface.fxml");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Error while creating account: " + e.getMessage()).show();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @FXML
@@ -125,7 +157,15 @@ public class LoginController {
 
     @FXML
     void linkForgotPwdOnActionEmpl(ActionEvent event) {
-
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/view/update-password.fxml"));
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Reset Password");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

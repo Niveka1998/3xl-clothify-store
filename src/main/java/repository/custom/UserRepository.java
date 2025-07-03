@@ -7,4 +7,5 @@ import java.sql.SQLException;
 public interface UserRepository {
     UserEntity findByEmail(String email) throws SQLException;
     boolean save(UserEntity user) throws SQLException;
+    boolean updatePassword(String email, String newPassword) throws SQLException;
 }

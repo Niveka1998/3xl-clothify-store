@@ -23,6 +23,12 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public boolean updatePassword(String email, String newPassword) throws SQLException {
+        return CrudUtil.execute("UPDATE users SET password = ? WHERE email = ?", newPassword, email);
+    }
+
+
+    @Override
     public boolean save(UserEntity user) throws SQLException {
         return CrudUtil.execute(
                 "INSERT INTO users (email, password, role) VALUES (?, ?, ?)",

@@ -2,6 +2,7 @@ package repository;
 
 import repository.custom.impl.EmployeeRepositoryImpl;
 import repository.custom.impl.ProductRepositoryImpl;
+import repository.custom.impl.SupplierRepositoryImpl;
 import util.RepositoryType;
 
 public class DAOFactory {
@@ -20,6 +21,7 @@ public class DAOFactory {
         switch (type){
             case EMPLOYEE: return (T) new EmployeeRepositoryImpl(); //type casting
             case PRODUCT: return (T) new ProductRepositoryImpl();
+            case SUPPLIER:return (T) new SupplierRepositoryImpl();
 
         }
         return null;
