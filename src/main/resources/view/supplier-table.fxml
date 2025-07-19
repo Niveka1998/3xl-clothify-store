@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane prefHeight="409.0" prefWidth="770.0" style="-fx-background-color: #88aad2;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdminController">
+   <children>
+      <TableView fx:id="tblSupplier" layoutX="20.0" layoutY="178.0" prefHeight="207.0" prefWidth="730.0">
+         <columns>
+            <TableColumn fx:id="colSupplierId" prefWidth="73.59997177124023" text="Id" />
+            <TableColumn fx:id="colSupplierName" prefWidth="191.99999237060547" text="Name" />
+            <TableColumn fx:id="colSupplierEmail" prefWidth="159.20001220703125" text="Email" />
+            <TableColumn fx:id="colSupplierCompany" prefWidth="166.40005493164062" text="Company" />
+            <TableColumn fx:id="colSupplierItem" prefWidth="126.40008544921875" text="Item" />
+         </columns>
+      </TableView>
+      <Label layoutX="20.0" layoutY="22.0" text="Suppliers" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font>
+      </Label>
+      <JFXButton fx:id="btnAddSupplier" layoutX="381.0" layoutY="139.0" onAction="#btnAddSupplierOnClick" style="-fx-background-color: black;" text="Add supplier" textFill="WHITE">
+         <font>
+            <Font name="System Bold Italic" size="12.0" />
+         </font>
+      </JFXButton>
+      <JFXButton fx:id="btnRemoveSupplier" layoutX="612.0" layoutY="139.0" onAction="#btnRemoveSupplierOnClick" style="-fx-background-color: black;" text="Remove supplier" textFill="WHITE">
+         <font>
+            <Font name="System Bold Italic" size="12.0" />
+         </font>
+      </JFXButton>
+      <JFXButton fx:id="btnEditSupplier" layoutX="477.0" layoutY="139.0" onAction="#btnEditSupplierOnClick" style="-fx-background-color: black;" text="Edit supplier details" textFill="WHITE">
+         <font>
+            <Font name="System Bold Italic" size="12.0" />
+         </font>
+      </JFXButton>
+      <JFXTextField fx:id="txtSupplierName" layoutX="21.0" layoutY="94.0" promptText="Name" unFocusColor="WHITE" />
+      <JFXTextField fx:id="txtSupplierCompany" layoutX="327.0" layoutY="94.0" promptText="Company" unFocusColor="WHITE" />
+      <JFXTextField fx:id="txtSupplierEmail" layoutX="173.0" layoutY="94.0" promptText="Email" unFocusColor="WHITE" />
+      <JFXButton fx:id="btnSearchSupplier" layoutX="131.0" layoutY="57.0" onAction="#btnSearchSupplierOnClick" prefHeight="26.0" prefWidth="158.0" style="-fx-background-color: black;" text="Search supplier by Id" textFill="WHITE">
+         <font>
+            <Font name="System Bold Italic" size="12.0" />
+         </font>
+      </JFXButton>
+      <JFXTextField fx:id="txtSupplierId" layoutX="20.0" layoutY="57.0" prefHeight="26.0" prefWidth="104.0" promptText="Id" unFocusColor="WHITE" />
+      <JFXTextField fx:id="txtSupplierItem" layoutX="477.0" layoutY="94.0" promptText="Item" unFocusColor="WHITE" />
+   </children>
+</AnchorPane>

@@ -9,7 +9,7 @@ public class DBConnection {
     private Connection connection;
 
     private DBConnection() throws SQLException {
-        connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/3xl_clothify_store", "root", "");
+        connection = DriverManager.getConnection("jdbc:mysql://localhost:3307/3xl_clothify_store", "root", "12345");
     }
 
     public Connection getConnection(){
@@ -18,6 +18,6 @@ public class DBConnection {
     }
 
     public static DBConnection getInstance() throws SQLException {
-        return instance == null ? instance = new DBConnection(): instance;
+        return instance == null ? instance = new DBConnection() : instance;
     }
 }

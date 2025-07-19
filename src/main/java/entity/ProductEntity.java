@@ -17,4 +17,9 @@ public class ProductEntity {
     private String supplier;
     private String category;
 
+    @Override
+    public String toString() {
+        return name;
+    }
+
 }

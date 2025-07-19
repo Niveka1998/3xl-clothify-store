@@ -9,8 +9,9 @@ import java.io.IOException;
 
 public class SceneSwitcher {
     public static void switchScene(Stage stage, String fxmlPath) throws IOException {
-        Parent load = FXMLLoader.load(SceneSwitcher.class.getResource(fxmlPath));
-        Scene scene = new Scene(load);
+        FXMLLoader loader = new FXMLLoader(SceneSwitcher.class.getResource(fxmlPath));
+        Parent root = loader.load();
+        Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
     }

@@ -10,7 +10,7 @@ import java.sql.SQLException;
 public class UserRepositoryImpl implements UserRepository {
     @Override
     public UserEntity findByEmail(String email) throws SQLException {
-        ResultSet rs = CrudUtil.execute("SELECT * FROM users WHERE email = ?", email);
+        ResultSet rs = CrudUtil.execute("SELECT * FROM user WHERE email = ?", email);
         if (rs.next()) {
             return new UserEntity(
                     rs.getInt("id"),
@@ -24,14 +24,14 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public boolean updatePassword(String email, String newPassword) throws SQLException {
-        return CrudUtil.execute("UPDATE users SET password = ? WHERE email = ?", newPassword, email);
+        return CrudUtil.execute("UPDATE user SET password = ? WHERE email = ?", newPassword, email);
     }
 
 
     @Override
     public boolean save(UserEntity user) throws SQLException {
         return CrudUtil.execute(
-                "INSERT INTO users (email, password, role) VALUES (?, ?, ?)",
+                "INSERT INTO user (email, password, role) VALUES (?, ?, ?)",
                 user.getEmail(),
                 user.getPassword(),
                 user.getRole()

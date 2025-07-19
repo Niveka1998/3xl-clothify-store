@@ -3,6 +3,7 @@ package service.custom.impl;
 
 import dto.Supplier;
 import entity.SupplierEntity;
+import jakarta.inject.Inject;
 import org.modelmapper.ModelMapper;
 import repository.DAOFactory;
 import repository.custom.SupplierRepository;
@@ -15,6 +16,8 @@ import java.util.List;
 
 public class SupplierServiceImpl implements SupplierService {
 
+//    @Inject
+//    private SupplierRepository supplierRepository;
     SupplierRepository supplierRepository = DAOFactory.getInstance().getRepositoryType(RepositoryType.SUPPLIER);
     ModelMapper mapper = new ModelMapper();
 

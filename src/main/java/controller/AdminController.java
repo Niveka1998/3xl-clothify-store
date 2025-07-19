@@ -1,19 +1,26 @@
 package controller;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import dto.Employee;
+import dto.Order;
 import dto.Product;
 import dto.Supplier;
+import jakarta.inject.Inject;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
 import repository.DAOFactory;
 import service.BoFactory;
 import service.custom.EmployeeService;
@@ -25,6 +32,7 @@ import service.custom.impl.SupplierServiceImpl;
 import util.CrudUtil;
 import util.ServiceType;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
 import java.util.ArrayList;
@@ -34,6 +42,7 @@ import java.util.ResourceBundle;
 public class AdminController implements Initializable {
 
     public JFXTextField txtEmployeeId;
+    @FXML
     public TableColumn colEmployeeId;
     public JFXTextField txtSupplierItem;
     public JFXTextField txtSupplierId;
@@ -55,13 +64,32 @@ public class AdminController implements Initializable {
     public TableColumn colCategory;
     public TableColumn colSupplier;
     public JFXTextField txtSupplier;
+    public JFXComboBox cmbPaymentType;
+    public JFXComboBox cmbSelectItem;
+    public JFXTextField txtOrderId;
+    public JFXTextField txtQuantity;
+    public JFXButton btnReturnOrder;
+    public JFXButton btnPlaceOrder;
+    public TableView tblOrder;
+    public TableColumn colOrderId;
+    public TableColumn colTotalCost;
+    public TableColumn colEmpId;
+    public TableColumn colEmpName;
+    public TableColumn colItemList;
+    public AnchorPane root2;
 
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        loadProductTable();
-        loadEmployeeTable();
-        loadSupplierTable();
+//    @Inject
+//    SupplierService supplierService;
 
-    }
+//    public void initialize(URL url, ResourceBundle resourceBundle) {
+//        loadProductTable();
+//        System.out.println("colProductId = " + colProductId);
+//
+//        loadEmployeeTable();
+//        loadSupplierTable();
+//        //loadProductsToComboBox();
+//
+//    }
     @FXML
     private JFXButton btnAddEmployee;
 
@@ -99,7 +127,7 @@ public class AdminController implements Initializable {
     private TableColumn colPrice;
 
     @FXML
-    private TableColumn colProductId;
+    public TableColumn colProductId;
 
     @FXML
     private TableColumn colProductName;
@@ -149,6 +177,8 @@ public class AdminController implements Initializable {
     EmployeeService employeeService = BoFactory.getInstance().getServiceType(ServiceType.EMPLOYEE);
     ProductService productService = BoFactory.getInstance().getServiceType(ServiceType.PRODUCT);
     SupplierService supplierService = BoFactory.getInstance().getServiceType(ServiceType.SUPPLIER);
+
+
 
     public boolean isValidEmail(String email) {
         String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
@@ -558,7 +588,7 @@ public class AdminController implements Initializable {
 
     }
 
-    List<Product> productList=  new ArrayList<>(); // arraylist to store products
+    List<Product> productList=  new ArrayList<>();
     private void loadProductTable() {
         productList.clear();
         colProductId.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -776,8 +806,11 @@ public class AdminController implements Initializable {
                 return;
             }
 
-            SupplierService supplierService1 = new SupplierServiceImpl();
-            Supplier supplier= supplierService1.searchSupplierId(id);
+//            SupplierService supplierService1 = new SupplierServiceImpl();
+//            Supplier supplier= supplierService1.searchSupplierId(id);
+
+            Supplier supplier = supplierService.searchSupplierId(id);
+
 
             if (supplier != null) {
                 populateSupplierFields(supplier);
@@ -869,4 +902,72 @@ public class AdminController implements Initializable {
         }
     }
 
+    private final List<Product> currentOrderItems = new ArrayList<>();
+    @FXML
+    public void btnAddItemToOrderOnClick(ActionEvent actionEvent) {
+
+    }
+
+
+
+    public void btnPlaceOrderOnClick(ActionEvent actionEvent) {
+    }
+
+    public void btnReturnOrderOnClick(ActionEvent actionEvent) {
+    }
+
+    private void loadProductsToComboBox() {
+
+    }
+
+
+    public void btnEmployeeTblOnClick(ActionEvent actionEvent) throws IOException {
+        URL resource = this.getClass().getResource("/view/employee-table.fxml");
+        assert resource != null;
+
+        Parent load = FXMLLoader.load(resource);
+        this.root2.getChildren().clear();
+        this.root2.getChildren().add(load);
+    }
+
+    public void btnProductTblOnClick(ActionEvent actionEvent) throws IOException {
+        URL resource = this.getClass().getResource("/view/product-table.fxml");
+        assert resource != null;
+
+        Parent load = FXMLLoader.load(resource);
+        this.root2.getChildren().clear();
+        this.root2.getChildren().add(load);
+    }
+
+    public void btnSupplierTblOnClick(ActionEvent actionEvent) throws IOException {
+        URL resource = this.getClass().getResource("/view/supplier-table.fxml");
+        assert resource != null;
+
+        Parent load = FXMLLoader.load(resource);
+        this.root2.getChildren().clear();
+        this.root2.getChildren().add(load);
+    }
+
+    public void btnOrderTblOnClick(ActionEvent actionEvent) throws IOException {
+        URL resource = this.getClass().getResource("/view/order-table.fxml");
+        assert resource != null;
+
+        Parent load = FXMLLoader.load(resource);
+        this.root2.getChildren().clear();
+        this.root2.getChildren().add(load);
+    }
+
+    public void btnAdminReportsOnClick(ActionEvent actionEvent) {
+
+    }
+
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        //loadProductTable();
+        System.out.println("colProductId = " + colProductId);
+
+        //loadEmployeeTable();
+        //loadSupplierTable();
+        //loadProductsToComboBox();
+
+    }
 }
