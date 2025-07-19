@@ -227,6 +227,7 @@ public class AdminController implements Initializable {
         txtQty.setText(String.valueOf(product.getQuantity()));
         txtProductCategory.setText(product.getCategory());
         txtSupplier.setText(product.getSupplier());
+        System.out.println(product);
 //        txtProductId.setEditable(false);
     }
 
@@ -963,8 +964,6 @@ public class AdminController implements Initializable {
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //loadProductTable();
-        System.out.println("colProductId = " + colProductId);
-
         //loadEmployeeTable();
         //loadSupplierTable();
         //loadProductsToComboBox();

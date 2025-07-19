@@ -8,12 +8,12 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@Entity
-@Table(name = "employee")
+//@Entity
+//@Table(name = "employee")
 
 public class EmployeeEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    //@Id
+    //@GeneratedValue(strategy = GenerationType.UUID)
     private int id;
     private String name;
     private String email;

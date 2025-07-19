@@ -8,11 +8,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
 import service.BoFactory;
 import service.custom.ProductService;
 import service.custom.SupplierService;
@@ -21,6 +24,7 @@ import service.custom.impl.SupplierServiceImpl;
 import util.CrudUtil;
 import util.ServiceType;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -129,6 +133,8 @@ public class EmployeeController implements Initializable {
 
     @FXML
     private JFXTextField txtSupplierName;
+    @FXML
+    public AnchorPane root2;
 
     ProductService productService = BoFactory.getInstance().getServiceType(ServiceType.PRODUCT);
     SupplierService supplierService = BoFactory.getInstance().getServiceType(ServiceType.SUPPLIER);
@@ -412,8 +418,8 @@ public class EmployeeController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        loadProductTable();
-        loadSupplierTable();
+        //loadProductTable();
+        //loadSupplierTable();
 
     }
 
@@ -622,6 +628,7 @@ public class EmployeeController implements Initializable {
         }
     }
 
+
     @FXML
     void btnReduceStockOnClick(ActionEvent event) {
         Product selectedProduct = (Product) tblProduct.getSelectionModel().getSelectedItem();
@@ -662,4 +669,33 @@ public class EmployeeController implements Initializable {
         }
     }
 
+    public void btnProductTblOnClick(ActionEvent actionEvent) throws IOException {
+        URL resource = this.getClass().getResource("/view/product-table.fxml");
+        assert resource != null;
+
+        Parent load = FXMLLoader.load(resource);
+        this.root2.getChildren().clear();
+        this.root2.getChildren().add(load);
+    }
+
+    public void btnSupplierTblOnClick(ActionEvent actionEvent) throws IOException {
+        URL resource = this.getClass().getResource("/view/supplier-table.fxml");
+        assert resource != null;
+
+        Parent load = FXMLLoader.load(resource);
+        this.root2.getChildren().clear();
+        this.root2.getChildren().add(load);
+    }
+
+    public void btnOrderTblOnClick(ActionEvent actionEvent) throws IOException {
+        URL resource = this.getClass().getResource("/view/order-table.fxml");
+        assert resource != null;
+
+        Parent load = FXMLLoader.load(resource);
+        this.root2.getChildren().clear();
+        this.root2.getChildren().add(load);
+    }
+
+    public void btnEmployeeReportsOnClick(ActionEvent actionEvent) {
+    }
 }

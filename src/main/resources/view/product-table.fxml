@@ -8,18 +8,17 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="409.0" prefWidth="770.0" style="-fx-background-color: #88aad2;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdminController">
    <children>
       <TableView fx:id="tblProduct" layoutX="18.0" layoutY="160.0" prefHeight="223.0" prefWidth="726.0">
          <columns>
             <TableColumn fx:id="colProductId" prefWidth="54.39999198913574" text="Id" />
-            <TableColumn fx:id="colProductName" prefWidth="162.4000015258789" text="Name" />
+            <TableColumn fx:id="colProductName" prefWidth="162.4000015258789" text="Product Name" />
             <TableColumn fx:id="colSize" prefWidth="60.79998779296875" text="Size" />
             <TableColumn fx:id="colPrice" prefWidth="102.39996337890625" text="Price" />
             <TableColumn fx:id="colQty" prefWidth="99.199951171875" text="Available qty" />
-            <TableColumn fx:id="colCategory" prefWidth="102.39993286132812" text="category" />
-            <TableColumn fx:id="colSupplier" prefWidth="119.2000732421875" text="Supplier Name" />
+            <TableColumn fx:id="colSupplier" prefWidth="109.5999755859375" text="Supplier Name" />
+            <TableColumn fx:id="colCategory" prefWidth="136.0" text="Category" />
          </columns>
       </TableView>
       <Label layoutX="25.0" layoutY="14.0" text="Products" textFill="WHITE">

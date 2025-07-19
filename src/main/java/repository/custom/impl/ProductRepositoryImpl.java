@@ -17,7 +17,7 @@ public class ProductRepositoryImpl implements ProductRepository, SuperRepository
     public Boolean add(ProductEntity entity) {
         try {
             return CrudUtil.execute(
-                    "INSERT INTO products (id, product_name, size, price, available_stock,supplier, category) VALUES (?, ?, ?, ?, ?, ?,?)",
+                    "INSERT INTO products (id, product_name, size, price, available_stock,category,supplier) VALUES (?, ?, ?, ?, ?, ?,?)",
                     entity.getId(),
                     entity.getName(),
                     entity.getSize(),

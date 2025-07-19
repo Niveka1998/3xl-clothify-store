@@ -17,24 +17,24 @@ public class EmployeeRepositoryImpl implements EmployeeRepository, SuperReposito
 
     @Override
     public Boolean add(EmployeeEntity entity) {
-        Session session = HibernateUtil.getSession();
-        session.beginTransaction();
-        session.persist(entity);
-        session.getTransaction().commit();
-        session.close();
-        return true;
-//        try {
-//            return CrudUtil.execute(
-//                    "INSERT INTO employee (id, name, email, employee_password) VALUES (?, ?, ?, ?)",
-//                    entity.getId(),
-//                    entity.getName(),
-//                    entity.getEmail(),
-//                    entity.getPassword()
-//            );
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            return false;
-//        }
+//        Session session = HibernateUtil.getSession();
+//        session.beginTransaction();
+//        session.persist(entity);
+//        session.getTransaction().commit();
+//        session.close();
+//        return true;
+        try {
+            return CrudUtil.execute(
+                    "INSERT INTO employee (id, name, email, employee_password) VALUES (?, ?, ?, ?)",
+                    entity.getId(),
+                    entity.getName(),
+                    entity.getEmail(),
+                    entity.getPassword()
+            );
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override

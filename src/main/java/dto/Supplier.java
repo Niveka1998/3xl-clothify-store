@@ -13,4 +13,6 @@ public class Supplier {
     private String company;
     private String email;
     private String item;
+
+
 }

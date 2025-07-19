@@ -17,10 +17,10 @@ public class Product {
     private String supplier;
     private String category;
 
-    @Override
-    public String toString() {
-        return name;
-    }
+//    @Override
+//    public String toString() {
+//        return name;
+//    }
 
 
 }
