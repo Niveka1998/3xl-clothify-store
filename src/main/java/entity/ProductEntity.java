@@ -1,5 +1,6 @@
 package entity;
 
+import jakarta.persistence.Id;
 import lombok.*;
 
 @Getter
@@ -9,6 +10,7 @@ import lombok.*;
 @ToString
 
 public class ProductEntity {
+    @Id
     private int id;
     private String name;
     private String size;

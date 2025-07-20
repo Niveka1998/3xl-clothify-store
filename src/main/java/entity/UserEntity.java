@@ -9,6 +9,7 @@ import lombok.*;
 @ToString
 
 public class UserEntity {
+
     private int id;
     private String email;
     private String password;

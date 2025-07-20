@@ -53,11 +53,12 @@ public class AdminController implements Initializable {
     public JFXButton btnEditSupplier;
     public JFXButton btnRemoveSupplier;
     public JFXButton btnAddSupplier;
-    public TableColumn colSupplierItem;
-    public TableColumn colSupplierCompany;
-    public TableColumn colSupplierEmail;
-    public TableColumn colSupplierName;
-    public TableColumn colSupplierId;
+    public TableColumn<Supplier, Integer> colSupplierId;
+    public TableColumn<Supplier, String> colSupplierName;
+    public TableColumn<Supplier, String> colSupplierEmail;
+    public TableColumn<Supplier, String> colSupplierCompany;
+    public TableColumn<Supplier, String> colSupplierItem;
+
     public TableView tblSupplier;
     public JFXTextField txtProductCategory;
     public JFXButton btnAddNewStock;
@@ -234,9 +235,10 @@ public class AdminController implements Initializable {
     public void populateSupplierFields(Supplier supplier){
         txtSupplierId.setText(String.valueOf(supplier.getId()));
         txtSupplierName.setText(supplier.getName());
-        txtSupplierItem.setText(supplier.getItem());
         txtSupplierCompany.setText(supplier.getCompany());
         txtSupplierEmail.setText(supplier.getEmail());
+        txtSupplierItem.setText(supplier.getItem());
+        System.out.println(supplier);
     }
 
     @FXML
@@ -690,8 +692,8 @@ public class AdminController implements Initializable {
     public void btnAddSupplierOnClick(ActionEvent actionEvent) {
         String id_text = txtSupplierId.getText();
         String supplier_name = txtSupplierName.getText();
-        String email = txtSupplierEmail.getText();
         String company = txtSupplierCompany.getText();
+        String email = txtSupplierEmail.getText();
         String item = txtSupplierItem.getText();
 
         if(supplier_name.isEmpty() || email.isEmpty() || company.isEmpty() || item.isEmpty()){
@@ -929,6 +931,7 @@ public class AdminController implements Initializable {
         Parent load = FXMLLoader.load(resource);
         this.root2.getChildren().clear();
         this.root2.getChildren().add(load);
+        loadEmployeeTable();
     }
 
     public void btnProductTblOnClick(ActionEvent actionEvent) throws IOException {
@@ -938,6 +941,7 @@ public class AdminController implements Initializable {
         Parent load = FXMLLoader.load(resource);
         this.root2.getChildren().clear();
         this.root2.getChildren().add(load);
+        loadProductTable();
     }
 
     public void btnSupplierTblOnClick(ActionEvent actionEvent) throws IOException {
@@ -947,6 +951,7 @@ public class AdminController implements Initializable {
         Parent load = FXMLLoader.load(resource);
         this.root2.getChildren().clear();
         this.root2.getChildren().add(load);
+        loadSupplierTable();
     }
 
     public void btnOrderTblOnClick(ActionEvent actionEvent) throws IOException {
@@ -956,6 +961,7 @@ public class AdminController implements Initializable {
         Parent load = FXMLLoader.load(resource);
         this.root2.getChildren().clear();
         this.root2.getChildren().add(load);
+
     }
 
     public void btnAdminReportsOnClick(ActionEvent actionEvent) {
