@@ -11,9 +11,7 @@ import java.util.List;
 @ToString
 public class Order {
     private int orderId;
-    private int employeeId;
-    private String employeeName;
-    private double totalCost;
-    private String paymentType;
-    private List<Product> items;
+    private int userId;
+    private String date;
+    private List<OrderDetails> items;
 }

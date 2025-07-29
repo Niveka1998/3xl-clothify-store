@@ -13,5 +13,5 @@ public interface ProductService extends SuperService {
     Product searchProductById(int id) throws SQLException;
     List<Product> getAll();
     boolean updateProductQuantity(int productId, int newQty) throws SQLException;
-
+    List<Integer> getProductIds();
 }

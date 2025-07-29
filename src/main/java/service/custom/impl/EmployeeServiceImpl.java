@@ -50,5 +50,23 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeList;
     }
 
-
+    @Override
+    public List<Integer> getEmployeeIds() {
+        try {
+            return repository.getEmployeeIds();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ArrayList<>(); // Return empty list on error
+        }
+    }
+    // Add this temporary method to your service
+    public void testDatabaseConnection() {
+        try {
+            System.out.println("Testing database connection...");
+            List<Integer> ids = getEmployeeIds();
+            System.out.println("Connection successful. Found " + ids.size() + " employees.");
+        } catch (Exception e) {
+            System.err.println("Database connection failed: " + e.getMessage());
+        }
+    }
 }

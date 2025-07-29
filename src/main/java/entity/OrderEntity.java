@@ -14,11 +14,6 @@ import java.util.List;
 public class OrderEntity {
     @Id
     private int orderId;
-    private int employeeId;
-    private String customerEmail;
-    private double totalCost;
-    private String paymentType;
-    private List<Product> items;
-
-
+    private int userId;
+    private String date;
 }

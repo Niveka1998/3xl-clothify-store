@@ -1,6 +1,7 @@
 package service.custom.impl;
 
 import dto.Employee;
+import dto.OrderDetails;
 import dto.Product;
 import entity.EmployeeEntity;
 import entity.ProductEntity;
@@ -61,4 +62,28 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.updateQuantity(productId, newQty);
     }
 
+    public Boolean updateStock(List<OrderDetails> orderDetails) throws SQLException {
+        for (OrderDetails details : orderDetails) {
+            Boolean isUpdate = updateStock(details);
+            if (!isUpdate) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public Boolean updateStock(OrderDetails orderDetails) throws SQLException {
+        String sql = "UPDATE products SET available_stock = available_stock - ? WHERE id =?";
+        return CrudUtil.execute(sql, orderDetails.getQty(), orderDetails.getItemCode());
+    }
+
+    @Override
+    public List<Integer> getProductIds(){
+        List<Product> all = getAll();
+        ArrayList<Integer> productIdList = new ArrayList<>();
+        all.forEach(product->{
+            productIdList.add(product.getId());
+        });
+        return productIdList;
+    }
 }

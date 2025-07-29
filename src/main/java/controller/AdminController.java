@@ -3,10 +3,7 @@ package controller;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
-import dto.Employee;
-import dto.Order;
-import dto.Product;
-import dto.Supplier;
+import dto.*;
 import jakarta.inject.Inject;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
@@ -17,6 +14,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -26,6 +24,7 @@ import service.BoFactory;
 import service.custom.EmployeeService;
 import service.custom.ProductService;
 import service.custom.SupplierService;
+import service.custom.UserService;
 import service.custom.impl.EmployeeServiceImpl;
 import service.custom.impl.ProductServiceImpl;
 import service.custom.impl.SupplierServiceImpl;
@@ -78,6 +77,20 @@ public class AdminController implements Initializable {
     public TableColumn colEmpName;
     public TableColumn colItemList;
     public AnchorPane root2;
+    public TableColumn colOrderDate;
+    @FXML
+    public TableColumn colUserId;
+    @FXML
+    public JFXTextField txtOrderDate;
+    @FXML
+    public JFXTextField txtUserId;
+    @FXML
+    public JFXComboBox<Integer> cmbUserId;
+    public JFXTextField txtStock;
+    public JFXButton btnAddToCart;
+    public JFXTextField txtUserName;
+    public JFXTextField txtUnitPrice;
+    public Label lblNetTotal;
 
 //    @Inject
 //    SupplierService supplierService;
@@ -178,6 +191,7 @@ public class AdminController implements Initializable {
     EmployeeService employeeService = BoFactory.getInstance().getServiceType(ServiceType.EMPLOYEE);
     ProductService productService = BoFactory.getInstance().getServiceType(ServiceType.PRODUCT);
     SupplierService supplierService = BoFactory.getInstance().getServiceType(ServiceType.SUPPLIER);
+    UserService userService = BoFactory.getInstance().getServiceType(ServiceType.USER);
 
 
 
@@ -688,7 +702,6 @@ public class AdminController implements Initializable {
         }
     }
 
-
     public void btnAddSupplierOnClick(ActionEvent actionEvent) {
         String id_text = txtSupplierId.getText();
         String supplier_name = txtSupplierName.getText();
@@ -912,14 +925,20 @@ public class AdminController implements Initializable {
     }
 
 
-
     public void btnPlaceOrderOnClick(ActionEvent actionEvent) {
+        String orderId = txtOrderId.getText();
+        String date = txtOrderDate.getText();
+        String userId = txtUserId.getText();
+
+        ArrayList<OrderDetails> orderDetailsArrayList= new ArrayList<>();
+
     }
 
     public void btnReturnOrderOnClick(ActionEvent actionEvent) {
     }
 
     private void loadProductsToComboBox() {
+
 
     }
 
@@ -931,7 +950,7 @@ public class AdminController implements Initializable {
         Parent load = FXMLLoader.load(resource);
         this.root2.getChildren().clear();
         this.root2.getChildren().add(load);
-        loadEmployeeTable();
+        //loadEmployeeTable();
     }
 
     public void btnProductTblOnClick(ActionEvent actionEvent) throws IOException {
@@ -941,7 +960,7 @@ public class AdminController implements Initializable {
         Parent load = FXMLLoader.load(resource);
         this.root2.getChildren().clear();
         this.root2.getChildren().add(load);
-        loadProductTable();
+        //loadProductTable();
     }
 
     public void btnSupplierTblOnClick(ActionEvent actionEvent) throws IOException {
@@ -951,9 +970,10 @@ public class AdminController implements Initializable {
         Parent load = FXMLLoader.load(resource);
         this.root2.getChildren().clear();
         this.root2.getChildren().add(load);
-        loadSupplierTable();
+        //loadSupplierTable();
     }
 
+    List<CartTM> cartTMS = new ArrayList<>();
     public void btnOrderTblOnClick(ActionEvent actionEvent) throws IOException {
         URL resource = this.getClass().getResource("/view/order-table.fxml");
         assert resource != null;
@@ -968,11 +988,88 @@ public class AdminController implements Initializable {
 
     }
 
+    private void loadUserIDs() throws SQLException {
+
+        System.out.println("Attempting to load user IDs...");
+        List<Integer> employeeIds = employeeService.getEmployeeIds();
+        System.out.println("Retrieved IDs: " + employeeIds);
+
+        if (employeeIds.isEmpty()) {
+            System.out.println("No employee IDs found in database!");
+        }
+
+        ObservableList<Integer> idList = FXCollections.observableArrayList(employeeIds);
+        cmbUserId.setItems(idList);
+        System.out.println("Combo box items set: " + cmbUserId.getItems()); // Debug log
+        }
+
+    private void loadItemCodes() throws SQLException {
+        List<Integer> allItemCodes = productService.getProductIds();
+        cmbSelectItem.setItems(FXCollections.observableArrayList(allItemCodes));
+    }
+
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //loadProductTable();
         //loadEmployeeTable();
         //loadSupplierTable();
         //loadProductsToComboBox();
 
+        cmbUserId = new JFXComboBox<>();
+        cmbSelectItem = new JFXComboBox<>();
+        try {
+            loadUserIDs();
+            loadItemCodes();
+
+            // Set default selections if available
+            if (!cmbUserId.getItems().isEmpty()) {
+                cmbUserId.getSelectionModel().selectFirst();
+            }
+            if (!cmbSelectItem.getItems().isEmpty()) {
+                cmbSelectItem.getSelectionModel().selectFirst();
+            }
+
+        } catch (SQLException e) {
+            new Alert(Alert.AlertType.ERROR, "Error loading data: " + e.getMessage()).show();
+        }
+
+    }
+
+    public void btnAddToCartOnClick(ActionEvent actionEvent) {
+        String itemCode = cmbSelectItem.getValue().toString();
+        Integer qtyOnHand = Integer.parseInt(txtQuantity.getText());
+        Double unitPrice = Double.parseDouble(txtUnitPrice.getText());
+        Double total = qtyOnHand*unitPrice;
+        cartTMS.add(new CartTM(itemCode,qtyOnHand,unitPrice,total));
+        tblOrder.setItems(FXCollections.observableArrayList(cartTMS));
+
+        calNetTotal();
+    }
+
+    private void calNetTotal(){
+        Double netTotal = 0.0;
+        for(CartTM item : cartTMS){
+            netTotal += item.getTotal();
+        }
+
+        lblNetTotal.setText(netTotal.toString());
+    }
+
+    private void setValuesToUserText(String employeeId){
+        try {
+            Employee employee= employeeService.searchEmployeeById(Integer.parseInt(employeeId));
+            txtUserName.setText(employee.getName());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void setValuesToItemText(String id){
+        try {
+            Product product = productService.searchProductById(Integer.parseInt(id));
+            txtStock.setText(String.valueOf(product.getQuantity()));
+            txtUnitPrice.setText(String.valueOf(product.getPrice()));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

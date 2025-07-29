@@ -101,4 +101,15 @@ public class EmployeeRepositoryImpl implements EmployeeRepository, SuperReposito
         }
         return list;
     }
+
+    @Override
+    public List<Integer> getEmployeeIds() throws SQLException {
+        List<Integer> ids = new ArrayList<>();
+        ResultSet rs = CrudUtil.execute("SELECT id FROM employee");
+
+        while (rs.next()) {
+            ids.add(rs.getInt(1));
+        }
+        return ids;
+    }
 }

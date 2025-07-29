@@ -12,4 +12,5 @@ public interface EmployeeService extends SuperService {
     Boolean deleteEmployee(int id);
     Employee searchEmployeeById(int id) throws SQLException;
     List<Employee> getAll();
+    List<Integer> getEmployeeIds();
 }
