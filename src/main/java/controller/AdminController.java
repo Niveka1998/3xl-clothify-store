@@ -2,10 +2,9 @@ package controller;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import dto.*;
-import jakarta.inject.Inject;
-import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -13,13 +12,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
-import repository.DAOFactory;
 import service.BoFactory;
 import service.custom.EmployeeService;
 import service.custom.ProductService;
@@ -27,7 +22,6 @@ import service.custom.SupplierService;
 import service.custom.UserService;
 import service.custom.impl.EmployeeServiceImpl;
 import service.custom.impl.ProductServiceImpl;
-import service.custom.impl.SupplierServiceImpl;
 import util.CrudUtil;
 import util.ServiceType;
 
@@ -40,75 +34,8 @@ import java.util.ResourceBundle;
 
 public class AdminController implements Initializable {
 
-    public JFXTextField txtEmployeeId;
-    @FXML
-    public TableColumn colEmployeeId;
-    public JFXTextField txtSupplierItem;
-    public JFXTextField txtSupplierId;
-    public JFXButton btnSearchSupplier;
-    public JFXTextField txtSupplierEmail;
-    public JFXTextField txtSupplierCompany;
-    public JFXTextField txtSupplierName;
-    public JFXButton btnEditSupplier;
-    public JFXButton btnRemoveSupplier;
-    public JFXButton btnAddSupplier;
-    public TableColumn<Supplier, Integer> colSupplierId;
-    public TableColumn<Supplier, String> colSupplierName;
-    public TableColumn<Supplier, String> colSupplierEmail;
-    public TableColumn<Supplier, String> colSupplierCompany;
-    public TableColumn<Supplier, String> colSupplierItem;
-
-    public TableView tblSupplier;
-    public JFXTextField txtProductCategory;
-    public JFXButton btnAddNewStock;
-    public TableColumn colCategory;
-    public TableColumn colSupplier;
-    public JFXTextField txtSupplier;
-    public JFXComboBox cmbPaymentType;
-    public JFXComboBox cmbSelectItem;
-    public JFXTextField txtOrderId;
-    public JFXTextField txtQuantity;
-    public JFXButton btnReturnOrder;
-    public JFXButton btnPlaceOrder;
-    public TableView tblOrder;
-    public TableColumn colOrderId;
-    public TableColumn colTotalCost;
-    public TableColumn colEmpId;
-    public TableColumn colEmpName;
-    public TableColumn colItemList;
-    public AnchorPane root2;
-    public TableColumn colOrderDate;
-    @FXML
-    public TableColumn colUserId;
-    @FXML
-    public JFXTextField txtOrderDate;
-    @FXML
-    public JFXTextField txtUserId;
-    @FXML
-    public JFXComboBox<Integer> cmbUserId;
-    public JFXTextField txtStock;
-    public JFXButton btnAddToCart;
-    public JFXTextField txtUserName;
-    public JFXTextField txtUnitPrice;
-    public Label lblNetTotal;
-
-//    @Inject
-//    SupplierService supplierService;
-
-//    public void initialize(URL url, ResourceBundle resourceBundle) {
-//        loadProductTable();
-//        System.out.println("colProductId = " + colProductId);
-//
-//        loadEmployeeTable();
-//        loadSupplierTable();
-//        //loadProductsToComboBox();
-//
-//    }
     @FXML
     private JFXButton btnAddEmployee;
-
-    @FXML
-    private JFXButton btnAddProduct;
 
     @FXML
     private JFXButton btnEditEmployee;
@@ -117,67 +44,150 @@ public class AdminController implements Initializable {
     private JFXButton btnRemoveEmployee;
 
     @FXML
-    private JFXButton btnRemoveProduct;
-
-    @FXML
     private JFXButton btnSearchEmployee;
 
     @FXML
-    private JFXButton btnSearchProduct;
+    private TableColumn<?, ?> colEmployeeEmail;
 
     @FXML
-    private TableColumn colEmployeeEmail;
+    private TableColumn<?, ?> colEmployeeId;
 
     @FXML
-    private TableColumn colEmployeeName;
+    private TableColumn<?, ?> colEmployeeName;
 
     @FXML
-    private TableColumn colEmployeePassword;
+    private TableColumn<?, ?> colEmployeePassword;
 
     @FXML
-    private TableColumn colImgUrl;
+    private TableView<Employee> tblEmployee;
+
 
     @FXML
-    private TableColumn colPrice;
+    private JFXTextField txtEmployeeId;
 
     @FXML
-    public TableColumn colProductId;
+    private JFXTextField txtEmployeeName;
+
 
     @FXML
-    private TableColumn colProductName;
+    private AnchorPane root2;
+    @FXML
+    private JFXButton btnCreateEmployeeAccount;
 
     @FXML
-    private TableColumn colQty;
+    private JFXButton btnEmployeeLogin;
 
     @FXML
-    private TableColumn colSize;
-
-    @FXML
-    private TableView tblEmployee;
-
-    @FXML
-    private TableView tblProduct;
-
-    @FXML
-    private JFXButton txtEditProduct;
+    private Hyperlink linkForgotPwdEmpl;
 
     @FXML
     private JFXTextField txtEmployeeEmail;
 
     @FXML
-    private JFXTextField txtEmployeeName;
+    private JFXPasswordField txtEmployeePassword;
 
     @FXML
-    private JFXTextField txtEmployeePassword;
+    private AnchorPane root;
+    @FXML
+    private JFXButton btnAddToCart;
+
+    @FXML
+    private JFXButton btnPlaceOrder;
+
+    @FXML
+    private JFXButton btnReturnOrder;
+
+    @FXML
+    private JFXComboBox cmbSelectItem;
+
+    @FXML
+    private JFXComboBox cmbUserId;
+
+    @FXML
+    private TableColumn<?, ?> colItemCode;
+
+    @FXML
+    private TableColumn<?, ?> colItemQty;
+
+    @FXML
+    private TableColumn<?, ?> colTotalPrice;
+
+    @FXML
+    private TableColumn<?, ?> colUnitPrice;
+
+    @FXML
+    private TableColumn<?, ?> colUserName;
+
+    @FXML
+    private Label lblNetTotal;
+
+    @FXML
+    private TableView tblOrder;
+
+    @FXML
+    private JFXTextField txtOrderId;
+
+    @FXML
+    private JFXTextField txtQuantity;
+
+    @FXML
+    private JFXTextField txtStock;
+
+    @FXML
+    private JFXTextField txtUnitPrice;
+
+    @FXML
+    private JFXTextField txtUserName;
+    @FXML
+    private JFXButton btnAddNewStock;
+
+    @FXML
+    private JFXButton btnAddProduct;
+
+    @FXML
+    private JFXButton btnReduceStock;
+
+    @FXML
+    private JFXButton btnRemoveProduct;
+
+    @FXML
+    private JFXButton btnSearchProduct;
+
+    @FXML
+    private TableColumn<Product, String> colCategory;
+
+    @FXML
+    private TableColumn<Product, Double> colPrice;
+
+    @FXML
+    private TableColumn<Product, Integer> colProductId;
+
+    @FXML
+    private TableColumn<Product, String> colProductName;
+
+    @FXML
+    private TableColumn<Product, Integer> colQty;
+
+    @FXML
+    private TableColumn<Product, String> colSize;
+
+    @FXML
+    private TableColumn<Product, String> colSupplier;
+
+    @FXML
+    private TableView<Product> tblProduct;
+
+    @FXML
+    private JFXButton txtEditProduct;
 
     @FXML
     private JFXTextField txtPrice;
 
     @FXML
-    private JFXTextField txtProductId;
+    private JFXTextField txtProductCategory;
 
     @FXML
-    private JFXTextField txtProductImageUrl;
+    private JFXTextField txtProductId;
 
     @FXML
     private JFXTextField txtProductName;
@@ -187,6 +197,58 @@ public class AdminController implements Initializable {
 
     @FXML
     private JFXTextField txtSize;
+
+    @FXML
+    private JFXTextField txtSupplier;
+    @FXML
+    private JFXButton btnAddSupplier;
+
+    @FXML
+    private JFXButton btnEditSupplier;
+
+    @FXML
+    private JFXButton btnRemoveSupplier;
+
+    @FXML
+    private JFXButton btnSearchSupplier;
+
+    @FXML
+    private TableColumn<Supplier, String> colSupplierCompany;
+
+    @FXML
+    private TableColumn<Supplier, String> colSupplierEmail;
+
+    @FXML
+    private TableColumn<Supplier, Integer> colSupplierId;
+
+    @FXML
+    private TableColumn<Supplier, String> colSupplierItem;
+
+    @FXML
+    private TableColumn<Supplier, String> colSupplierName;
+
+    @FXML
+    private TableView<Supplier> tblSupplier;
+
+    @FXML
+    private JFXTextField txtSupplierCompany;
+
+    @FXML
+    private JFXTextField txtSupplierEmail;
+
+    @FXML
+    private JFXTextField txtSupplierId;
+
+    @FXML
+    private JFXTextField txtSupplierItem;
+
+    @FXML
+    private JFXTextField txtSupplierName;
+    @FXML
+    private TextField txtEmail;
+
+    @FXML
+    private PasswordField txtNewPassword;
 
     EmployeeService employeeService = BoFactory.getInstance().getServiceType(ServiceType.EMPLOYEE);
     ProductService productService = BoFactory.getInstance().getServiceType(ServiceType.PRODUCT);
@@ -927,8 +989,6 @@ public class AdminController implements Initializable {
 
     public void btnPlaceOrderOnClick(ActionEvent actionEvent) {
         String orderId = txtOrderId.getText();
-        String date = txtOrderDate.getText();
-        String userId = txtUserId.getText();
 
         ArrayList<OrderDetails> orderDetailsArrayList= new ArrayList<>();
 
@@ -981,7 +1041,7 @@ public class AdminController implements Initializable {
         Parent load = FXMLLoader.load(resource);
         this.root2.getChildren().clear();
         this.root2.getChildren().add(load);
-
+//
     }
 
     public void btnAdminReportsOnClick(ActionEvent actionEvent) {
@@ -1009,10 +1069,29 @@ public class AdminController implements Initializable {
     }
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        //loadProductTable();
-        //loadEmployeeTable();
-        //loadSupplierTable();
-        //loadProductsToComboBox();
+//        loadProductTable();
+//        loadEmployeeTable();
+//        loadSupplierTable();
+
+//        tblEmployee.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+//            if (newSelection != null) {
+//                populateEmployeeFields(newSelection);
+//            }
+//        });
+        System.out.println("colProductId is: " + colProductId);
+
+
+//        tblProduct.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+//            if (newSelection != null) {
+//                populateProductFields(newSelection);
+//            }
+//        });
+//
+//        tblSupplier.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+//            if (newSelection != null) {
+//                populateSupplierFields(newSelection);
+//            }
+//        });
 
         cmbUserId = new JFXComboBox<>();
         cmbSelectItem = new JFXComboBox<>();
@@ -1023,6 +1102,7 @@ public class AdminController implements Initializable {
             // Set default selections if available
             if (!cmbUserId.getItems().isEmpty()) {
                 cmbUserId.getSelectionModel().selectFirst();
+
             }
             if (!cmbSelectItem.getItems().isEmpty()) {
                 cmbSelectItem.getSelectionModel().selectFirst();

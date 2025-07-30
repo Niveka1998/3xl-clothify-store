@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 public class OrderEntity {
-    @Id
+    //@Id
     private int orderId;
     private int userId;
     private String date;

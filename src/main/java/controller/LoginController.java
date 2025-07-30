@@ -82,7 +82,7 @@ public class LoginController {
             e.printStackTrace();
             new Alert(Alert.AlertType.ERROR, "Error during login: " + e.getMessage()).show();
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            System.out.println("error");
             throw new RuntimeException(e);
         }
     }

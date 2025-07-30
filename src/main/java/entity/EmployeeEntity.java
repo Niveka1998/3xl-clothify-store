@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@Entity
+//@Entity
 //@Table(name = "employee")
 
 public class EmployeeEntity {

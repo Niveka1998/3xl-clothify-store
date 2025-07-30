@@ -13,7 +13,7 @@ import lombok.*;
 @ToString
 //@Entity
 public class SupplierEntity {
-    @Id
+    //@Id
     //@GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String name;
