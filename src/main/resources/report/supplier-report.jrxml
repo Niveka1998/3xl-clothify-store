@@ -1,0 +1,98 @@
+<!-- Created with Jaspersoft Studio version 7.0.3.final using JasperReports Library version 7.0.3-41034ca841d452f3305ba55b9042260aaa1ab5dd  -->
+<jasperReport name="supplier-report" language="java" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="02d164f0-a40f-4840-8778-578d8512df43">
+    <property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+    <property name="com.jaspersoft.studio.data.defaultdataadapter" value="New Data Adapter (3)"/>
+    <query language="SQL"><![CDATA[select * from supplier]]></query>
+    <field name="id" class="java.lang.Integer">
+        <property name="com.jaspersoft.studio.field.name" value="id"/>
+        <property name="com.jaspersoft.studio.field.label" value="id"/>
+        <property name="com.jaspersoft.studio.field.tree.path" value="supplier"/>
+    </field>
+    <field name="name" class="java.lang.String">
+        <property name="com.jaspersoft.studio.field.name" value="name"/>
+        <property name="com.jaspersoft.studio.field.label" value="name"/>
+        <property name="com.jaspersoft.studio.field.tree.path" value="supplier"/>
+    </field>
+    <field name="company" class="java.lang.String">
+        <property name="com.jaspersoft.studio.field.name" value="company"/>
+        <property name="com.jaspersoft.studio.field.label" value="company"/>
+        <property name="com.jaspersoft.studio.field.tree.path" value="supplier"/>
+    </field>
+    <field name="email" class="java.lang.String">
+        <property name="com.jaspersoft.studio.field.name" value="email"/>
+        <property name="com.jaspersoft.studio.field.label" value="email"/>
+        <property name="com.jaspersoft.studio.field.tree.path" value="supplier"/>
+    </field>
+    <field name="item" class="java.lang.String">
+        <property name="com.jaspersoft.studio.field.name" value="item"/>
+        <property name="com.jaspersoft.studio.field.label" value="item"/>
+        <property name="com.jaspersoft.studio.field.tree.path" value="supplier"/>
+    </field>
+    <group name="id">
+        <expression><![CDATA[$F{id}]]></expression>
+    </group>
+    <group name="name">
+        <expression><![CDATA[$F{name}]]></expression>
+    </group>
+    <group name="company">
+        <expression><![CDATA[$F{company}]]></expression>
+    </group>
+    <group name="email">
+        <expression><![CDATA[$F{email}]]></expression>
+    </group>
+    <group name="item">
+        <expression><![CDATA[$F{item}]]></expression>
+    </group>
+    <background splitType="Stretch"/>
+    <title height="79" splitType="Stretch"/>
+    <pageHeader height="35" splitType="Stretch"/>
+    <columnHeader height="61" splitType="Stretch">
+        <element kind="staticText" uuid="d874bb15-b1d3-43ce-9ee5-5269882c2896" x="0" y="20" width="100" height="30" fontSize="20.0">
+            <text><![CDATA[id]]></text>
+            <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="baa03905-7354-49e8-96ac-5f42a7d55b83"/>
+        </element>
+        <element kind="staticText" uuid="bca6b123-8a29-40e6-9fb5-5f56ff03d542" x="115" y="20" width="100" height="30" fontSize="20.0">
+            <text><![CDATA[name]]></text>
+            <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ff098b42-4570-493a-9a6f-b673c6a642de"/>
+        </element>
+        <element kind="staticText" uuid="ce6e1e67-cf23-428a-95c0-4e134a9a6a48" x="227" y="20" width="100" height="30" fontSize="20.0">
+            <text><![CDATA[company]]></text>
+            <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ec297f27-3aef-498c-bea5-22130060ef59"/>
+        </element>
+        <element kind="staticText" uuid="7dbd3fcd-4dfa-4165-9dc3-7b0523aa5e63" x="335" y="20" width="100" height="30" fontSize="20.0">
+            <text><![CDATA[email]]></text>
+            <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="46ba0e02-75fe-4a57-a1f3-286656fe3433"/>
+        </element>
+        <element kind="staticText" uuid="bd28ead7-985d-4e41-ae8f-f7931ddffb9c" x="444" y="20" width="100" height="30" fontSize="20.0">
+            <text><![CDATA[item]]></text>
+            <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9930f210-b580-4e66-aa3d-8609df5f366b"/>
+        </element>
+    </columnHeader>
+    <detail>
+        <band height="125" splitType="Stretch">
+            <element kind="textField" uuid="1854671c-6627-4da9-9125-3a4ec513f02d" x="5" y="20" width="100" height="30" fontSize="20.0">
+                <expression><![CDATA[$F{id}]]></expression>
+                <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="baa03905-7354-49e8-96ac-5f42a7d55b83"/>
+            </element>
+            <element kind="textField" uuid="af2baab4-99b2-47cd-ab2e-6c56f8ea1138" x="115" y="20" width="100" height="30" fontSize="20.0">
+                <expression><![CDATA[$F{name}]]></expression>
+                <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ff098b42-4570-493a-9a6f-b673c6a642de"/>
+            </element>
+            <element kind="textField" uuid="c52384c5-4474-4e29-8477-b91d1c78767a" x="225" y="20" width="100" height="30" fontSize="20.0">
+                <expression><![CDATA[$F{company}]]></expression>
+                <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ec297f27-3aef-498c-bea5-22130060ef59"/>
+            </element>
+            <element kind="textField" uuid="507de43a-6435-4de4-bd63-6c5b4228eb38" x="335" y="20" width="100" height="30" fontSize="20.0">
+                <expression><![CDATA[$F{email}]]></expression>
+                <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="46ba0e02-75fe-4a57-a1f3-286656fe3433"/>
+            </element>
+            <element kind="textField" uuid="572d04cf-8415-432d-8d06-1bb9a0448083" x="445" y="20" width="100" height="30" fontSize="20.0">
+                <expression><![CDATA[$F{item}]]></expression>
+                <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9930f210-b580-4e66-aa3d-8609df5f366b"/>
+            </element>
+        </band>
+    </detail>
+    <columnFooter height="45" splitType="Stretch"/>
+    <pageFooter height="54" splitType="Stretch"/>
+    <summary height="42" splitType="Stretch"/>
+</jasperReport>

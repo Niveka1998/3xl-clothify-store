@@ -7,13 +7,10 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="431.0" prefWidth="911.0" style="-fx-border-style: solid; -fx-border-color: black; -fx-border-width: 3px; -fx-background-color: #88aad2;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdminController">
+<AnchorPane prefHeight="431.0" prefWidth="911.0" style="-fx-border-style: solid; -fx-border-color: black; -fx-border-width: 3px; -fx-background-color: #88aad2;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdminController">
    <children>
-      <BorderPane layoutY="3.0">
-         <center>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#131313" height="450.0" stroke="BLACK" strokeType="INSIDE" width="325.0" />
-         </center>
-      </BorderPane>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" height="458.0" layoutY="1.0" stroke="BLACK" strokeType="INSIDE" width="328.0" />
+      <BorderPane layoutY="3.0" />
       <Label layoutX="53.0" layoutY="59.0" prefHeight="41.0" prefWidth="219.0" text="Admin Interface" textFill="WHITE" wrapText="true">
          <font>
             <Font name="System Bold Italic" size="28.0" />
@@ -39,11 +36,16 @@
             <Font name="System Bold" size="14.0" />
          </font>
       </JFXButton>
-      <JFXButton layoutX="69.0" layoutY="328.0" onAction="#btnAdminReportsOnClick" prefHeight="26.0" prefWidth="179.0" style="-fx-background-color: #88aad2;" text="Reports" textFill="WHITE">
+      <JFXButton layoutX="69.0" layoutY="328.0" onAction="#btnGenerateEmplReport" prefHeight="30.0" prefWidth="198.0" style="-fx-background-color: #88aad2;" text="Generate Employee Report" textFill="WHITE">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
       </JFXButton>
       <AnchorPane fx:id="root2" layoutX="326.0" layoutY="1.0" prefHeight="450.0" prefWidth="770.0" />
+      <JFXButton layoutX="69.0" layoutY="372.0" onAction="#btnGenerateSuppReport" prefHeight="30.0" prefWidth="198.0" style="-fx-background-color: #88aad2;" text="Generate Supplier Report" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </JFXButton>
    </children>
 </AnchorPane>

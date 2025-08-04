@@ -29,11 +29,6 @@
             <Font name="System Bold" size="14.0" />
          </font>
       </JFXButton>
-      <JFXButton layoutX="69.0" layoutY="250.0" onAction="#btnEmployeeReportsOnClick" prefHeight="26.0" prefWidth="179.0" style="-fx-background-color: #88aad2;" text="Reports" textFill="WHITE">
-         <font>
-            <Font name="System Bold" size="14.0" />
-         </font>
-      </JFXButton>
       <AnchorPane fx:id="root2" layoutX="325.0" prefHeight="440.0" prefWidth="770.0" />
    </children>
 </AnchorPane>

@@ -4,6 +4,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
+import db.DBConnection;
 import dto.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,6 +16,10 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.view.JasperViewer;
 import service.BoFactory;
 import service.custom.EmployeeService;
 import service.custom.ProductService;
@@ -1050,17 +1055,17 @@ public class AdminController implements Initializable {
 
     private void loadUserIDs() throws SQLException {
 
-        System.out.println("Attempting to load user IDs...");
-        List<Integer> employeeIds = employeeService.getEmployeeIds();
-        System.out.println("Retrieved IDs: " + employeeIds);
+//        System.out.println("Attempting to load user IDs...");
+//        List<Integer> employeeIds = employeeService.getEmployeeIds();
+//        System.out.println("Retrieved IDs: " + employeeIds);
 
-        if (employeeIds.isEmpty()) {
-            System.out.println("No employee IDs found in database!");
-        }
+//        if (employeeIds.isEmpty()) {
+//            System.out.println("No employee IDs found in database!");
+//        }
 
-        ObservableList<Integer> idList = FXCollections.observableArrayList(employeeIds);
-        cmbUserId.setItems(idList);
-        System.out.println("Combo box items set: " + cmbUserId.getItems()); // Debug log
+//        ObservableList<Integer> idList = FXCollections.observableArrayList(employeeIds);
+//        cmbUserId.setItems(idList);
+//        System.out.println("Combo box items set: " + cmbUserId.getItems()); // Debug log
         }
 
     private void loadItemCodes() throws SQLException {
@@ -1148,6 +1153,48 @@ public class AdminController implements Initializable {
             Product product = productService.searchProductById(Integer.parseInt(id));
             txtStock.setText(String.valueOf(product.getQuantity()));
             txtUnitPrice.setText(String.valueOf(product.getPrice()));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void btnGetProductReportOnClick(ActionEvent actionEvent) {
+        try {
+            JasperDesign design = JRXmlLoader.load("src/main/resources/report/inventory-report.jrxml");
+            JasperReport report = JasperCompileManager.compileReport(design);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(report, null, DBConnection.getInstance().getConnection());
+            JasperExportManager.exportReportToPdfFile(jasperPrint, "inventory-report.pdf");
+            JasperViewer.viewReport(jasperPrint, false);
+        } catch (JRException e) {
+            throw new RuntimeException(e);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void btnGenerateSuppReport(ActionEvent actionEvent) {
+        try {
+            JasperDesign design = JRXmlLoader.load("src/main/resources/report/supplier-report.jrxml");
+            JasperReport report = JasperCompileManager.compileReport(design);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(report, null, DBConnection.getInstance().getConnection());
+            JasperExportManager.exportReportToPdfFile(jasperPrint, "supplier-report.pdf");
+            JasperViewer.viewReport(jasperPrint, false);
+        } catch (JRException e) {
+            throw new RuntimeException(e);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void btnGenerateEmplReport(ActionEvent actionEvent) {
+        try {
+            JasperDesign design = JRXmlLoader.load("src/main/resources/report/employee-report.jrxml");
+            JasperReport report = JasperCompileManager.compileReport(design);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(report, null, DBConnection.getInstance().getConnection());
+            JasperExportManager.exportReportToPdfFile(jasperPrint, "employee-report.pdf");
+            JasperViewer.viewReport(jasperPrint, false);
+        } catch (JRException e) {
+            throw new RuntimeException(e);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
