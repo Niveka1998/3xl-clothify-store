@@ -6,6 +6,7 @@ import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import db.DBConnection;
 import dto.*;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -39,6 +40,8 @@ import java.util.ResourceBundle;
 
 public class AdminController implements Initializable {
 
+    @FXML
+    private JFXTextField txtEmployeePassword;
     @FXML
     private JFXButton btnAddEmployee;
 
@@ -87,9 +90,6 @@ public class AdminController implements Initializable {
 
     @FXML
     private JFXTextField txtEmployeeEmail;
-
-    @FXML
-    private JFXPasswordField txtEmployeePassword;
 
     @FXML
     private AnchorPane root;
@@ -294,6 +294,10 @@ public class AdminController implements Initializable {
     }
 
     public void populateEmployeeFields(Employee employee) {
+        if (employee == null) {
+            new Alert(Alert.AlertType.WARNING, "Employee not found").show();
+            return;
+        }
         txtEmployeeId.setText(String.valueOf(employee.getId()));
         txtEmployeeName.setText(employee.getName());
         txtEmployeeEmail.setText(employee.getEmail());
@@ -302,6 +306,10 @@ public class AdminController implements Initializable {
     }
 
     public void populateProductFields(Product product){
+        if (product == null) {
+            new Alert(Alert.AlertType.WARNING, "Product not found").show();
+            return;
+        }
         txtProductId.setText(String.valueOf(product.getId()));
         txtProductName.setText(product.getName());
         txtSize.setText(product.getSize());
@@ -314,6 +322,10 @@ public class AdminController implements Initializable {
     }
 
     public void populateSupplierFields(Supplier supplier){
+        if (supplier == null) {
+            new Alert(Alert.AlertType.WARNING, "Employee not found").show();
+            return;
+        }
         txtSupplierId.setText(String.valueOf(supplier.getId()));
         txtSupplierName.setText(supplier.getName());
         txtSupplierCompany.setText(supplier.getCompany());
@@ -333,7 +345,7 @@ public class AdminController implements Initializable {
             new Alert(Alert.AlertType.ERROR,"Please fill all the fields first!").show();
             return;
         }
-        if (!password.matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$")) {
+        if (!password.matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[^A-Za-z\\d])[A-Za-z\\d\\W_]{8,}$")) {
             new Alert(Alert.AlertType.ERROR, "Password must be at least 8 characters, include a letter, a number, and a symbol!").show();
             return;
         }
@@ -343,8 +355,9 @@ public class AdminController implements Initializable {
             return;
         }
 
+        int id;
         try {
-            int id = Integer.parseInt(txtEmployeeId.getText());
+             id =Integer.parseInt(txtEmployeeId.getText());
             if(id<=0){
                 new Alert(Alert.AlertType.ERROR,"ID must be a positive number!").show();
                 return;
@@ -353,9 +366,9 @@ public class AdminController implements Initializable {
             new Alert(Alert.AlertType.ERROR,"Invalid ID. Please enter a positive number.").show();
             return;
         }
-        // add duplicate id validation later
+
         try {
-            int id = Integer.parseInt(txtEmployeeId.getText());
+            id = Integer.parseInt(txtEmployeeId.getText());
             Employee employee = employeeService.searchEmployeeById(id);
             if (employee!=null) {
                 new Alert(Alert.AlertType.ERROR, "Employee with ID " + id + " already exists.").show();
@@ -367,7 +380,7 @@ public class AdminController implements Initializable {
             return;
         }
 
-        int id = Integer.parseInt(txtEmployeeId.getText());
+        id = Integer.parseInt(txtEmployeeId.getText());
         Employee employee = new Employee(id,employee_name,email,password);
         Boolean b = employeeService.addEmployee(employee);
         //Boolean isAdded= CrudUtil.execute("INSERT INTO employee(name,email,employee_password) VALUES(?,?,?)",employee_name,email,password);
@@ -471,7 +484,7 @@ public class AdminController implements Initializable {
             new Alert(Alert.AlertType.ERROR,"Please fill all the fields first!").show();
             return;
         }
-        if (!password.matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$")) {
+        if (!password.matches("^(?=.*[A-Za-z])(?=.*\\\\d)(?=.*[^A-Za-z\\\\d])[A-Za-z\\\\d\\W_]{8,}$")) {
             new Alert(Alert.AlertType.ERROR, "Password must be at least 8 characters, include a letter, a number, and a symbol!").show();
             return;
         }
@@ -635,7 +648,12 @@ public class AdminController implements Initializable {
 
             Employee employee = employeeService.searchEmployeeById(id);
 
-            populateEmployeeFields(employee);
+            if (employee != null) {
+                populateEmployeeFields(employee);
+            } else {
+                new Alert(Alert.AlertType.WARNING, "Employee not found!").show();
+                clearEmployeeFields();
+            }
 
 
         } catch (SQLException e) {
@@ -674,6 +692,20 @@ public class AdminController implements Initializable {
 
     List<Product> productList=  new ArrayList<>();
     private void loadProductTable() {
+        // Add null checks for all table columns
+        if (colProductId == null || colProductName == null || colSize == null ||
+                colPrice == null || colQty == null || colSupplier == null || colCategory == null) {
+            System.err.println("One or more table columns are null. Check FXML fx:id values.");
+            System.err.println("colProductId: " + colProductId);
+            System.err.println("colProductName: " + colProductName);
+            System.err.println("colSize: " + colSize);
+            System.err.println("colPrice: " + colPrice);
+            System.err.println("colQty: " + colQty);
+            System.err.println("colSupplier: " + colSupplier);
+            System.err.println("colCategory: " + colCategory);
+            return;
+        }
+
         productList.clear();
         colProductId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colProductName.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -684,29 +716,26 @@ public class AdminController implements Initializable {
         colCategory.setCellValueFactory(new PropertyValueFactory<>("category"));
 
         try {
-
             ResultSet resultSet = CrudUtil.execute("SELECT * FROM products");
             while (resultSet.next()) {
-               productList.add(new Product(resultSet.getInt(1),
+                productList.add(new Product(resultSet.getInt(1),
                         resultSet.getString(2),
                         resultSet.getString(3),
                         resultSet.getDouble(4),
                         resultSet.getInt(5),
                         resultSet.getString(6),
                         resultSet.getString(7)));
-
             }
+
             ObservableList<Product> productObservableList = FXCollections.observableArrayList();
-                productList.forEach(product -> productObservableList.add(product));
+            productList.forEach(product -> productObservableList.add(product));
 
-                tblProduct.getItems().clear();
-                tblProduct.setItems(productObservableList);
-
+            tblProduct.getItems().clear();
+            tblProduct.setItems(productObservableList);
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     List<Employee> employeeList = new ArrayList<>();
@@ -899,6 +928,7 @@ public class AdminController implements Initializable {
                 populateSupplierFields(supplier);
             } else {
                 new Alert(Alert.AlertType.WARNING, "Supplier not found!").show();
+                clearSupplierFields();
             }
 
         } catch (NumberFormatException e) {
@@ -1009,44 +1039,100 @@ public class AdminController implements Initializable {
 
 
     public void btnEmployeeTblOnClick(ActionEvent actionEvent) throws IOException {
-        URL resource = this.getClass().getResource("/view/employee-table.fxml");
-        assert resource != null;
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/employee-table.fxml"));
+            // Don't set controller if employee-table.fxml already has fx:controller
+            Parent load = loader.load();
 
-        Parent load = FXMLLoader.load(resource);
-        this.root2.getChildren().clear();
-        this.root2.getChildren().add(load);
-        //loadEmployeeTable();
+            // Get the controller if needed to set up data
+            Object controller = loader.getController();
+            if (controller instanceof AdminController) {
+                AdminController adminController = (AdminController) controller;
+                adminController.loadEmployeeTable();
+            }
+
+            this.root2.getChildren().clear();
+            this.root2.getChildren().add(load);
+        } catch (IOException e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Error loading employee table: " + e.getMessage()).show();
+        }
     }
 
     public void btnProductTblOnClick(ActionEvent actionEvent) throws IOException {
-        URL resource = this.getClass().getResource("/view/product-table.fxml");
-        assert resource != null;
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/product-table.fxml"));
+            Parent load = loader.load();
 
-        Parent load = FXMLLoader.load(resource);
-        this.root2.getChildren().clear();
-        this.root2.getChildren().add(load);
-        //loadProductTable();
+            Object controller = loader.getController();
+            if (controller instanceof AdminController) {
+                AdminController adminController = (AdminController) controller;
+                adminController.loadProductTable();
+            }
+
+            this.root2.getChildren().clear();
+            this.root2.getChildren().add(load);
+        } catch (IOException e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Error loading product table: " + e.getMessage()).show();
+        }
     }
 
     public void btnSupplierTblOnClick(ActionEvent actionEvent) throws IOException {
-        URL resource = this.getClass().getResource("/view/supplier-table.fxml");
-        assert resource != null;
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/supplier-table.fxml"));
+            Parent load = loader.load();
 
-        Parent load = FXMLLoader.load(resource);
-        this.root2.getChildren().clear();
-        this.root2.getChildren().add(load);
-        //loadSupplierTable();
+            Object controller = loader.getController();
+            if (controller instanceof AdminController) {
+                AdminController adminController = (AdminController) controller;
+                adminController.loadSupplierTable();
+            }
+
+            this.root2.getChildren().clear();
+            this.root2.getChildren().add(load);
+        } catch (IOException e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Error loading supplier table: " + e.getMessage()).show();
+        }
     }
 
     List<CartTM> cartTMS = new ArrayList<>();
     public void btnOrderTblOnClick(ActionEvent actionEvent) throws IOException {
-        URL resource = this.getClass().getResource("/view/order-table.fxml");
-        assert resource != null;
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/order-table.fxml"));
+            Parent load = loader.load();
 
-        Parent load = FXMLLoader.load(resource);
-        this.root2.getChildren().clear();
-        this.root2.getChildren().add(load);
-//
+            // Get the controller and load combo data
+            Object controller = loader.getController();
+            if (controller instanceof AdminController) {
+                AdminController adminController = (AdminController) controller;
+
+                // Now load the combo box data for this specific instance
+                try {
+                    adminController.loadUserIDs();
+                    adminController.loadItemCodes();
+
+                    // Set default selections if available
+                    if (adminController.cmbUserId != null && !adminController.cmbUserId.getItems().isEmpty()) {
+                        adminController.cmbUserId.getSelectionModel().selectFirst();
+                    }
+                    if (adminController.cmbSelectItem != null && !adminController.cmbSelectItem.getItems().isEmpty()) {
+                        adminController.cmbSelectItem.getSelectionModel().selectFirst();
+                    }
+
+                } catch (SQLException e) {
+                    new Alert(Alert.AlertType.ERROR, "Error loading data: " + e.getMessage()).show();
+                }
+            }
+
+            this.root2.getChildren().clear();
+            this.root2.getChildren().add(load);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Error loading order table: " + e.getMessage()).show();
+        }
     }
 
     public void btnAdminReportsOnClick(ActionEvent actionEvent) {
@@ -1055,17 +1141,17 @@ public class AdminController implements Initializable {
 
     private void loadUserIDs() throws SQLException {
 
-//        System.out.println("Attempting to load user IDs...");
-//        List<Integer> employeeIds = employeeService.getEmployeeIds();
-//        System.out.println("Retrieved IDs: " + employeeIds);
+        System.out.println("Attempting to load user IDs...");
+        List<Integer> employeeIds = employeeService.getEmployeeIds();
+        System.out.println("Retrieved IDs: " + employeeIds);
 
-//        if (employeeIds.isEmpty()) {
-//            System.out.println("No employee IDs found in database!");
-//        }
+        if (employeeIds.isEmpty()) {
+            System.out.println("No employee IDs found in database!");
+        }
 
-//        ObservableList<Integer> idList = FXCollections.observableArrayList(employeeIds);
-//        cmbUserId.setItems(idList);
-//        System.out.println("Combo box items set: " + cmbUserId.getItems()); // Debug log
+        ObservableList<Integer> idList = FXCollections.observableArrayList(employeeIds);
+        cmbUserId.setItems(idList);
+        System.out.println("Combo box items set: " + cmbUserId.getItems()); // Debug log
         }
 
     private void loadItemCodes() throws SQLException {
@@ -1074,47 +1160,41 @@ public class AdminController implements Initializable {
     }
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
-//        loadProductTable();
-//        loadEmployeeTable();
-//        loadSupplierTable();
+        System.out.println("AdminController initialized");
+        //System.out.println("colProductId is: " + colProductId);
+        if (colProductId != null && tblProduct != null) {
+            loadProductTable();
+        }
 
-//        tblEmployee.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-//            if (newSelection != null) {
-//                populateEmployeeFields(newSelection);
-//            }
-//        });
-        System.out.println("colProductId is: " + colProductId);
+        if (colEmployeeId != null && tblEmployee != null) {
+            loadEmployeeTable();
+        }
 
+        if (colSupplierId != null && tblSupplier != null) {
+            loadSupplierTable();
+        }
 
-//        tblProduct.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-//            if (newSelection != null) {
-//                populateProductFields(newSelection);
-//            }
-//        });
-//
-//        tblSupplier.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-//            if (newSelection != null) {
-//                populateSupplierFields(newSelection);
-//            }
-//        });
+        if (cmbUserId != null && cmbSelectItem != null) {
+            System.out.println("Setting up combo box listeners...");
+            setupComboBoxListeners();
 
-        cmbUserId = new JFXComboBox<>();
-        cmbSelectItem = new JFXComboBox<>();
-        try {
-            loadUserIDs();
-            loadItemCodes();
+            try {
+                loadUserIDs();
+                loadItemCodes();
 
-            // Set default selections if available
-            if (!cmbUserId.getItems().isEmpty()) {
-                cmbUserId.getSelectionModel().selectFirst();
+                // Set default selections if available
+                if (!cmbUserId.getItems().isEmpty()) {
+                    cmbUserId.getSelectionModel().selectFirst();
+                }
+                if (!cmbSelectItem.getItems().isEmpty()) {
+                    cmbSelectItem.getSelectionModel().selectFirst();
+                }
 
+            } catch (SQLException e) {
+                new Alert(Alert.AlertType.ERROR, "Error loading data: " + e.getMessage()).show();
             }
-            if (!cmbSelectItem.getItems().isEmpty()) {
-                cmbSelectItem.getSelectionModel().selectFirst();
-            }
-
-        } catch (SQLException e) {
-            new Alert(Alert.AlertType.ERROR, "Error loading data: " + e.getMessage()).show();
+        } else {
+            System.out.println("ComboBoxes not injected - this is normal for main admin interface");
         }
 
     }
@@ -1124,7 +1204,12 @@ public class AdminController implements Initializable {
         Integer qtyOnHand = Integer.parseInt(txtQuantity.getText());
         Double unitPrice = Double.parseDouble(txtUnitPrice.getText());
         Double total = qtyOnHand*unitPrice;
+        System.out.println("item code: "+itemCode);
+        System.out.println("qty: "+qtyOnHand);
+        System.out.println("unit price: "+unitPrice);
+
         cartTMS.add(new CartTM(itemCode,qtyOnHand,unitPrice,total));
+        System.out.println(cartTMS);
         tblOrder.setItems(FXCollections.observableArrayList(cartTMS));
 
         calNetTotal();
@@ -1139,22 +1224,61 @@ public class AdminController implements Initializable {
         lblNetTotal.setText(netTotal.toString());
     }
 
-    private void setValuesToUserText(String employeeId){
+    public void setupComboBoxListeners() {
+        if (cmbUserId != null) {
+            cmbUserId.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue != null) {
+                    setValuesToUserText(newValue.toString());
+                }
+            });
+        }
+
+        if (cmbSelectItem != null) {
+            cmbSelectItem.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue != null) {
+                    setValuesToItemText(newValue.toString());
+                }
+            });
+        }
+    }
+    private void setValuesToUserText(String employeeId) {
         try {
-            Employee employee= employeeService.searchEmployeeById(Integer.parseInt(employeeId));
-            txtUserName.setText(employee.getName());
+            int id = Integer.parseInt(employeeId);
+            Employee employee = employeeService.searchEmployeeById(id);
+
+            if (employee != null) {
+                txtUserName.setText(employee.getName());
+            } else {
+                txtUserName.setText("Employee not found");
+            }
+
+        } catch (NumberFormatException e) {
+            new Alert(Alert.AlertType.ERROR, "Invalid employee ID format").show();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            new Alert(Alert.AlertType.ERROR, "Error loading employee: " + e.getMessage()).show();
+            e.printStackTrace();
         }
     }
 
-    private void setValuesToItemText(String id){
+    private void setValuesToItemText(String id) {
         try {
-            Product product = productService.searchProductById(Integer.parseInt(id));
-            txtStock.setText(String.valueOf(product.getQuantity()));
-            txtUnitPrice.setText(String.valueOf(product.getPrice()));
+            int productId = Integer.parseInt(id);
+            Product product = productService.searchProductById(productId);
+
+            if (product != null) {
+                txtStock.setText(String.valueOf(product.getQuantity()));
+                txtUnitPrice.setText(String.valueOf(product.getPrice()));
+            } else {
+                txtStock.setText("0");
+                txtUnitPrice.setText("0.0");
+                new Alert(Alert.AlertType.WARNING, "Product not found").show();
+            }
+
+        } catch (NumberFormatException e) {
+            new Alert(Alert.AlertType.ERROR, "Invalid product ID format").show();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            new Alert(Alert.AlertType.ERROR, "Error loading product: " + e.getMessage()).show();
+            e.printStackTrace();
         }
     }
 
