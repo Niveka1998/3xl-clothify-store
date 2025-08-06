@@ -12,6 +12,6 @@ import java.util.List;
 public class Order {
     private int orderId;
     private int userId;
-    private String date;
+    //private String date;
     private List<OrderDetails> items;
 }

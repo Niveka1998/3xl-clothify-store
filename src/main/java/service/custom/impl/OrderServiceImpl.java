@@ -21,8 +21,7 @@ public class OrderServiceImpl implements OrderService {
             connection.setAutoCommit(false);
             PreparedStatement psTm = connection.prepareStatement(sql);
             psTm.setObject(1,order.getOrderId());
-            psTm.setObject(2,order.getDate());
-            psTm.setObject(3,order.getUserId());
+            psTm.setObject(2,order.getUserId());
             Boolean isOrderAdd = psTm.executeUpdate()>0;
             if (isOrderAdd){
                 Boolean isOrderDetailAdd = new OrderDetailServiceImpl().addOrderDetails(order.getItems());

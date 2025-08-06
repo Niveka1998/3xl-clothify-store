@@ -2,11 +2,9 @@ package controller;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import db.DBConnection;
 import dto.*;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -22,10 +20,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.view.JasperViewer;
 import service.BoFactory;
-import service.custom.EmployeeService;
-import service.custom.ProductService;
-import service.custom.SupplierService;
-import service.custom.UserService;
+import service.custom.*;
 import service.custom.impl.EmployeeServiceImpl;
 import service.custom.impl.ProductServiceImpl;
 import util.CrudUtil;
@@ -108,20 +103,13 @@ public class AdminController implements Initializable {
     @FXML
     private JFXComboBox cmbUserId;
 
-    @FXML
-    private TableColumn<?, ?> colItemCode;
+    @FXML private TableColumn<CartTM, String> colItemCode;
+    @FXML private TableColumn<CartTM, Integer> colItemQty;
+    @FXML private TableColumn<CartTM, Double> colUnitPrice;
+    @FXML private TableColumn<CartTM, Double> colTotalPrice;
 
     @FXML
-    private TableColumn<?, ?> colItemQty;
-
-    @FXML
-    private TableColumn<?, ?> colTotalPrice;
-
-    @FXML
-    private TableColumn<?, ?> colUnitPrice;
-
-    @FXML
-    private TableColumn<?, ?> colUserName;
+    private TableColumn<CartTM, String> colUserName;
 
     @FXML
     private Label lblNetTotal;
@@ -259,13 +247,14 @@ public class AdminController implements Initializable {
     ProductService productService = BoFactory.getInstance().getServiceType(ServiceType.PRODUCT);
     SupplierService supplierService = BoFactory.getInstance().getServiceType(ServiceType.SUPPLIER);
     UserService userService = BoFactory.getInstance().getServiceType(ServiceType.USER);
-
+    OrderService orderService= BoFactory.getInstance().getServiceType(ServiceType.ORDER);
 
 
     public boolean isValidEmail(String email) {
         String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
         return email.matches(emailRegex);
     }
+    //clear fields
     private void clearEmployeeFields() {
         txtEmployeeId.clear();
         txtEmployeeName.clear();
@@ -293,6 +282,7 @@ public class AdminController implements Initializable {
         txtSupplierName.clear();
     }
 
+    //populate fields
     public void populateEmployeeFields(Employee employee) {
         if (employee == null) {
             new Alert(Alert.AlertType.WARNING, "Employee not found").show();
@@ -334,6 +324,9 @@ public class AdminController implements Initializable {
         System.out.println(supplier);
     }
 
+    //crud operations for employee, product, supplier
+
+//  add
     @FXML
     void btnAddEmployeeOnClick(ActionEvent event) {
         String id_text = txtEmployeeId.getText();
@@ -473,6 +466,62 @@ public class AdminController implements Initializable {
         }
     }
 
+    public void btnAddSupplierOnClick(ActionEvent actionEvent) {
+        String id_text = txtSupplierId.getText();
+        String supplier_name = txtSupplierName.getText();
+        String company = txtSupplierCompany.getText();
+        String email = txtSupplierEmail.getText();
+        String item = txtSupplierItem.getText();
+
+        if(supplier_name.isEmpty() || email.isEmpty() || company.isEmpty() || item.isEmpty()){
+            new Alert(Alert.AlertType.ERROR,"Please fill all the fields first!").show();
+            return;
+        }
+
+        if (!isValidEmail(email)) {
+            new Alert(Alert.AlertType.ERROR, "Enter a valid email address").show();
+            return;
+        }
+
+        try {
+            int id = Integer.parseInt(txtSupplierId.getText());
+            if(id<=0){
+                new Alert(Alert.AlertType.ERROR,"ID must be a positive number!").show();
+                return;
+            }
+        }catch (NumberFormatException e){
+            new Alert(Alert.AlertType.ERROR,"Invalid ID. Please enter a positive number.").show();
+            return;
+        }
+        // add duplicate id validation later
+        try {
+            int id = Integer.parseInt(txtSupplierId.getText());
+            Supplier supplier = supplierService.searchSupplierId(id);
+            if (supplier!=null) {
+                new Alert(Alert.AlertType.ERROR, "Supplier with ID " + id + " already exists.").show();
+                return;
+            }
+        } catch (SQLException e) {
+            new Alert(Alert.AlertType.ERROR, "Error checking for existing supplier: " + e.getMessage()).show();
+            e.printStackTrace(); // Log the error
+            return;
+        }
+
+        int id = Integer.parseInt(txtSupplierId.getText());
+        Supplier supplier = new Supplier(id,supplier_name,email,company,item);
+        Boolean b = supplierService.addSupplier(supplier);
+        //Boolean isAdded= CrudUtil.execute("INSERT INTO employee(name,email,employee_password) VALUES(?,?,?)",employee_name,email,password);
+        if(b != null && b){
+            new Alert(Alert.AlertType.INFORMATION,"New supplier added successfully!").show();
+            clearSupplierFields();
+            loadSupplierTable();
+
+        }else {
+            new Alert(Alert.AlertType.ERROR, "Error adding new supplier!").show();
+        }
+    }
+
+//    edit
     @FXML
     void btnEditEmployeeOnClick(ActionEvent event) {
         String employee_name = txtEmployeeName.getText();
@@ -591,6 +640,47 @@ public class AdminController implements Initializable {
 
     }
 
+    public void btnEditSupplierOnClick(ActionEvent actionEvent) {
+        String id_text = txtSupplierId.getText();
+        String supplier_name = txtSupplierName.getText();
+        String email = txtSupplierEmail.getText();
+        String company = txtSupplierCompany.getText();
+        String item = txtSupplierItem.getText();
+
+        if(supplier_name.isEmpty() || email.isEmpty()|| company.isEmpty() ||item.isEmpty()){
+            new Alert(Alert.AlertType.ERROR,"Please fill all the fields first!").show();
+            return;
+        }
+
+        try {
+            int id =Integer.parseInt(txtSupplierId.getText());
+            if(id<=0){
+                new Alert(Alert.AlertType.ERROR,"ID must be a positive number!").show();
+                return;
+            }
+        }catch (NumberFormatException e){
+            new Alert(Alert.AlertType.ERROR,"Invalid ID. Please enter a positive number.").show();
+            return;
+        }
+
+        int id =Integer.parseInt(txtSupplierId.getText());
+        Supplier supplier = new Supplier(id,supplier_name,company,email,item);
+
+        Boolean b = supplierService.updateSupplier(supplier);
+        if(b){
+            new Alert(Alert.AlertType.INFORMATION,"Supplier updated successfully!").show();
+            loadSupplierTable();
+            clearProductFields();
+        }else {
+            new Alert(Alert.AlertType.ERROR, "Error updating supplier!").show();
+        }
+
+        clearSupplierFields();
+        loadSupplierTable();
+
+    }
+
+//    remove
     @FXML
     void btnRemoveEmployeeOnClick(ActionEvent event) {
         String id= txtEmployeeId.getText();
@@ -629,6 +719,24 @@ public class AdminController implements Initializable {
 
     }
 
+    public void btnRemoveSupplierOnClick(ActionEvent actionEvent) {
+        String id = txtSupplierId.getText();
+        try {
+            Boolean isDeleted = CrudUtil.execute("DELETE FROM supplier WHERE id =? ",id);
+
+            if(isDeleted){
+                new Alert(Alert.AlertType.INFORMATION,"Supplier deleted from the system!").show();
+            }else{
+                new Alert(Alert.AlertType.ERROR, "Error deleting supplier!").show();
+            }
+            loadSupplierTable();
+            clearSupplierFields();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+//    search
     @FXML
     void btnSearchEmployeeOnClick(ActionEvent event) {
         try {
@@ -690,6 +798,36 @@ public class AdminController implements Initializable {
 
     }
 
+    public void btnSearchSupplierOnClick(ActionEvent actionEvent) {
+        try {
+            int id = Integer.parseInt(txtSupplierId.getText());
+            if (id <= 0) {
+                new Alert(Alert.AlertType.ERROR, "ID must be a positive number!").show();
+                return;
+            }
+
+//            SupplierService supplierService1 = new SupplierServiceImpl();
+//            Supplier supplier= supplierService1.searchSupplierId(id);
+
+            Supplier supplier = supplierService.searchSupplierId(id);
+
+
+            if (supplier != null) {
+                populateSupplierFields(supplier);
+            } else {
+                new Alert(Alert.AlertType.WARNING, "Supplier not found!").show();
+                clearSupplierFields();
+            }
+
+        } catch (NumberFormatException e) {
+            new Alert(Alert.AlertType.ERROR, "Invalid ID. Please enter a positive number.").show();
+        } catch (SQLException e) {
+            e.printStackTrace(); // Optional: Log the exception for debugging
+            new Alert(Alert.AlertType.ERROR, "An error occurred while searching for the supplier.").show();
+        }
+    }
+
+    //load tables
     List<Product> productList=  new ArrayList<>();
     private void loadProductTable() {
         // Add null checks for all table columns
@@ -798,147 +936,8 @@ public class AdminController implements Initializable {
         }
     }
 
-    public void btnAddSupplierOnClick(ActionEvent actionEvent) {
-        String id_text = txtSupplierId.getText();
-        String supplier_name = txtSupplierName.getText();
-        String company = txtSupplierCompany.getText();
-        String email = txtSupplierEmail.getText();
-        String item = txtSupplierItem.getText();
 
-        if(supplier_name.isEmpty() || email.isEmpty() || company.isEmpty() || item.isEmpty()){
-            new Alert(Alert.AlertType.ERROR,"Please fill all the fields first!").show();
-            return;
-        }
-
-        if (!isValidEmail(email)) {
-            new Alert(Alert.AlertType.ERROR, "Enter a valid email address").show();
-            return;
-        }
-
-        try {
-            int id = Integer.parseInt(txtSupplierId.getText());
-            if(id<=0){
-                new Alert(Alert.AlertType.ERROR,"ID must be a positive number!").show();
-                return;
-            }
-        }catch (NumberFormatException e){
-            new Alert(Alert.AlertType.ERROR,"Invalid ID. Please enter a positive number.").show();
-            return;
-        }
-        // add duplicate id validation later
-        try {
-            int id = Integer.parseInt(txtSupplierId.getText());
-            Supplier supplier = supplierService.searchSupplierId(id);
-            if (supplier!=null) {
-                new Alert(Alert.AlertType.ERROR, "Supplier with ID " + id + " already exists.").show();
-                return;
-            }
-        } catch (SQLException e) {
-            new Alert(Alert.AlertType.ERROR, "Error checking for existing supplier: " + e.getMessage()).show();
-            e.printStackTrace(); // Log the error
-            return;
-        }
-
-        int id = Integer.parseInt(txtSupplierId.getText());
-        Supplier supplier = new Supplier(id,supplier_name,email,company,item);
-        Boolean b = supplierService.addSupplier(supplier);
-        //Boolean isAdded= CrudUtil.execute("INSERT INTO employee(name,email,employee_password) VALUES(?,?,?)",employee_name,email,password);
-        if(b != null && b){
-            new Alert(Alert.AlertType.INFORMATION,"New supplier added successfully!").show();
-            clearSupplierFields();
-            loadSupplierTable();
-
-        }else {
-            new Alert(Alert.AlertType.ERROR, "Error adding new supplier!").show();
-        }
-    }
-
-    public void btnRemoveSupplierOnClick(ActionEvent actionEvent) {
-        String id = txtSupplierId.getText();
-        try {
-            Boolean isDeleted = CrudUtil.execute("DELETE FROM supplier WHERE id =? ",id);
-
-            if(isDeleted){
-                new Alert(Alert.AlertType.INFORMATION,"Supplier deleted from the system!").show();
-            }else{
-                new Alert(Alert.AlertType.ERROR, "Error deleting supplier!").show();
-            }
-            loadSupplierTable();
-            clearSupplierFields();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void btnEditSupplierOnClick(ActionEvent actionEvent) {
-        String id_text = txtSupplierId.getText();
-        String supplier_name = txtSupplierName.getText();
-        String email = txtSupplierEmail.getText();
-        String company = txtSupplierCompany.getText();
-        String item = txtSupplierItem.getText();
-
-        if(supplier_name.isEmpty() || email.isEmpty()|| company.isEmpty() ||item.isEmpty()){
-            new Alert(Alert.AlertType.ERROR,"Please fill all the fields first!").show();
-            return;
-        }
-
-        try {
-            int id =Integer.parseInt(txtSupplierId.getText());
-            if(id<=0){
-                new Alert(Alert.AlertType.ERROR,"ID must be a positive number!").show();
-                return;
-            }
-        }catch (NumberFormatException e){
-            new Alert(Alert.AlertType.ERROR,"Invalid ID. Please enter a positive number.").show();
-            return;
-        }
-
-        int id =Integer.parseInt(txtSupplierId.getText());
-        Supplier supplier = new Supplier(id,supplier_name,company,email,item);
-
-        Boolean b = supplierService.updateSupplier(supplier);
-        if(b){
-            new Alert(Alert.AlertType.INFORMATION,"Supplier updated successfully!").show();
-            loadSupplierTable();
-            clearProductFields();
-        }else {
-            new Alert(Alert.AlertType.ERROR, "Error updating supplier!").show();
-        }
-
-        clearSupplierFields();
-        loadSupplierTable();
-
-    }
-
-    public void btnSearchSupplierOnClick(ActionEvent actionEvent) {
-        try {
-            int id = Integer.parseInt(txtSupplierId.getText());
-            if (id <= 0) {
-                new Alert(Alert.AlertType.ERROR, "ID must be a positive number!").show();
-                return;
-            }
-
-//            SupplierService supplierService1 = new SupplierServiceImpl();
-//            Supplier supplier= supplierService1.searchSupplierId(id);
-
-            Supplier supplier = supplierService.searchSupplierId(id);
-
-
-            if (supplier != null) {
-                populateSupplierFields(supplier);
-            } else {
-                new Alert(Alert.AlertType.WARNING, "Supplier not found!").show();
-                clearSupplierFields();
-            }
-
-        } catch (NumberFormatException e) {
-            new Alert(Alert.AlertType.ERROR, "Invalid ID. Please enter a positive number.").show();
-        } catch (SQLException e) {
-            e.printStackTrace(); // Optional: Log the exception for debugging
-            new Alert(Alert.AlertType.ERROR, "An error occurred while searching for the supplier.").show();
-        }
-    }
-
+    // add and reduce stock
     public void btnAddNewStockOnClick(ActionEvent actionEvent) {
         Product selectedProduct = (Product) tblProduct.getSelectionModel().getSelectedItem();
 
@@ -1015,36 +1014,14 @@ public class AdminController implements Initializable {
         }
     }
 
-    private final List<Product> currentOrderItems = new ArrayList<>();
-    @FXML
-    public void btnAddItemToOrderOnClick(ActionEvent actionEvent) {
 
-    }
-
-
-    public void btnPlaceOrderOnClick(ActionEvent actionEvent) {
-        String orderId = txtOrderId.getText();
-
-        ArrayList<OrderDetails> orderDetailsArrayList= new ArrayList<>();
-
-    }
-
-    public void btnReturnOrderOnClick(ActionEvent actionEvent) {
-    }
-
-    private void loadProductsToComboBox() {
-
-
-    }
-
+    // load interfaces into admin interface
 
     public void btnEmployeeTblOnClick(ActionEvent actionEvent) throws IOException {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/employee-table.fxml"));
-            // Don't set controller if employee-table.fxml already has fx:controller
             Parent load = loader.load();
 
-            // Get the controller if needed to set up data
             Object controller = loader.getController();
             if (controller instanceof AdminController) {
                 AdminController adminController = (AdminController) controller;
@@ -1097,6 +1074,8 @@ public class AdminController implements Initializable {
         }
     }
 
+
+    //load order table
     List<CartTM> cartTMS = new ArrayList<>();
     public void btnOrderTblOnClick(ActionEvent actionEvent) throws IOException {
         try {
@@ -1135,10 +1114,6 @@ public class AdminController implements Initializable {
         }
     }
 
-    public void btnAdminReportsOnClick(ActionEvent actionEvent) {
-
-    }
-
     private void loadUserIDs() throws SQLException {
 
         System.out.println("Attempting to load user IDs...");
@@ -1159,54 +1134,12 @@ public class AdminController implements Initializable {
         cmbSelectItem.setItems(FXCollections.observableArrayList(allItemCodes));
     }
 
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        System.out.println("AdminController initialized");
-        //System.out.println("colProductId is: " + colProductId);
-        if (colProductId != null && tblProduct != null) {
-            loadProductTable();
-        }
-
-        if (colEmployeeId != null && tblEmployee != null) {
-            loadEmployeeTable();
-        }
-
-        if (colSupplierId != null && tblSupplier != null) {
-            loadSupplierTable();
-        }
-
-        if (cmbUserId != null && cmbSelectItem != null) {
-            System.out.println("Setting up combo box listeners...");
-            setupComboBoxListeners();
-
-            try {
-                loadUserIDs();
-                loadItemCodes();
-
-                // Set default selections if available
-                if (!cmbUserId.getItems().isEmpty()) {
-                    cmbUserId.getSelectionModel().selectFirst();
-                }
-                if (!cmbSelectItem.getItems().isEmpty()) {
-                    cmbSelectItem.getSelectionModel().selectFirst();
-                }
-
-            } catch (SQLException e) {
-                new Alert(Alert.AlertType.ERROR, "Error loading data: " + e.getMessage()).show();
-            }
-        } else {
-            System.out.println("ComboBoxes not injected - this is normal for main admin interface");
-        }
-
-    }
-
     public void btnAddToCartOnClick(ActionEvent actionEvent) {
         String itemCode = cmbSelectItem.getValue().toString();
         Integer qtyOnHand = Integer.parseInt(txtQuantity.getText());
         Double unitPrice = Double.parseDouble(txtUnitPrice.getText());
-        Double total = qtyOnHand*unitPrice;
-        System.out.println("item code: "+itemCode);
-        System.out.println("qty: "+qtyOnHand);
-        System.out.println("unit price: "+unitPrice);
+        Double total = qtyOnHand * unitPrice;
+        String userName = txtUserName.getText();
 
         cartTMS.add(new CartTM(itemCode,qtyOnHand,unitPrice,total));
         System.out.println(cartTMS);
@@ -1241,6 +1174,7 @@ public class AdminController implements Initializable {
             });
         }
     }
+
     private void setValuesToUserText(String employeeId) {
         try {
             int id = Integer.parseInt(employeeId);
@@ -1282,6 +1216,25 @@ public class AdminController implements Initializable {
         }
     }
 
+    public void btnPlaceOrder(ActionEvent event) throws  SQLException{
+        int userId = Integer.parseInt(cmbUserId.getValue().toString());
+        int orderId = Integer.parseInt(txtOrderId.getText());
+        ArrayList<OrderDetails> orderDetailsArrayList = new ArrayList<>();
+        cartTMS.forEach(cart -> orderDetailsArrayList.add(
+                new OrderDetails(
+                        cart.getOrderId(),
+                        cart.getItemCode(),
+                        cart.getQtyOnHand(),
+                        cart.getUnitPrice())
+        ));
+
+        Order o1 = new Order(orderId,userId,orderDetailsArrayList);
+        System.out.println(o1);
+
+        orderService.placeOrder(o1);
+    }
+
+    //report generation
     public void btnGetProductReportOnClick(ActionEvent actionEvent) {
         try {
             JasperDesign design = JRXmlLoader.load("src/main/resources/report/inventory-report.jrxml");
@@ -1322,5 +1275,53 @@ public class AdminController implements Initializable {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+
+//initialize
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        System.out.println("AdminController initialized");
+        //System.out.println("colProductId is: " + colProductId);
+        if (colProductId != null && tblProduct != null) {
+            loadProductTable();
+        }
+
+        if (colEmployeeId != null && tblEmployee != null) {
+            loadEmployeeTable();
+        }
+
+        if (colSupplierId != null && tblSupplier != null) {
+            loadSupplierTable();
+        }
+
+        if (cmbUserId != null && cmbSelectItem != null) {
+            System.out.println("Setting up combo box listeners...");
+            setupComboBoxListeners();
+
+            try {
+                loadUserIDs();
+                loadItemCodes();
+
+                // Set default selections if available
+                if (!cmbUserId.getItems().isEmpty()) {
+                    cmbUserId.getSelectionModel().selectFirst();
+                }
+                if (!cmbSelectItem.getItems().isEmpty()) {
+                    cmbSelectItem.getSelectionModel().selectFirst();
+                }
+
+            } catch (SQLException e) {
+                new Alert(Alert.AlertType.ERROR, "Error loading data: " + e.getMessage()).show();
+            }
+        } else {
+            System.out.println("ComboBoxes not injected - this is normal for main admin interface");
+        }
+
+        colItemCode.setCellValueFactory(new PropertyValueFactory<>("itemCode"));
+        colQty.setCellValueFactory(new PropertyValueFactory<>("qtyOnHand"));
+        colUnitPrice.setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
+        colTotalPrice.setCellValueFactory(new PropertyValueFactory<>("total"));
+
+
     }
 }
