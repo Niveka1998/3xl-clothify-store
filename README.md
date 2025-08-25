@@ -1,77 +1,144 @@
-🧵 Clothify Store App
+# 🧵 Clothify Store App
 
-A JavaFX-based desktop application for managing a clothing store, built as part of my learning journey in Java development. 
+A comprehensive JavaFX-based desktop Point of Sale (POS) application for managing clothing store operations, built as part of my Java development journey. The system features role-based authentication, modular dashboards, and complete CRUD operations for core business entities.
 
-The system features role-based login, modular dashboards, and CRUD operations for core business entities.
+## 🚀 Key Features
 
-🚀 Features
+### 🔐 **Role-Based Authentication System**
+- Unified login interface for Admin and Employee users
+- Secure authentication with automatic role-based dashboard redirection
+- Account creation and management capabilities
 
-🔐 Dual Login System
+### 🧑‍💼 **Admin Dashboard - Full Access Control**
+- **Product Management**: Complete inventory control with add, view, update, delete, and search functionality
+- **Employee Management**: Full staff administration (exclusive to admin)
+- **Supplier Management**: Comprehensive supplier database with CRUD operations
+- **Stock Management**: Add new product stock and remove existing inventory
+- **Order Processing**: Handle customer orders and transactions
+- **Reporting System**: Generate detailed reports for products, employees, and suppliers
 
-Single login window for both Admin and Employee
+### 👕 **Employee Dashboard - Store Operations**
+- **Product Management**: Add, update, search, and delete products
+- **Supplier Management**: Full supplier CRUD operations
+- **Stock Control**: Manage product inventory levels
+- **Order Management**: Process customer orders efficiently
+- Streamlined UI optimized for day-to-day store operations
 
-Role-based redirection to respective dashboards
+## ⚙️ **Technical Architecture**
 
-🧑‍💼 Admin Dashboard
+### **Technologies Used:**
+- **Java** - Core programming language
+- **JavaFX** - Modern desktop UI framework
+- **Object-Oriented Programming** - Clean, maintainable code structure
+- **Layered Architecture** - Proper separation of concerns:
+  - **Controller Layer** - Handles UI interactions and user input
+  - **Service Layer** - Contains business logic and validation
+  - **Repository Layer** - Manages data access and persistence
 
-Manage Products, Employees, Suppliers, and Orders
+### **Planned Technology Integration:**
+- **Hibernate** - For robust database integration and ORM
+- **Jasper Reports** - For professional report generation and bill printing
 
-Perform full CRUD operations: Add, View, Update, Delete, Search
+## 📌 **Development Status**
 
-👕 Employee Dashboard
+### ✅ **Completed Features:**
+- ✅ Role-based login system with authentication
+- ✅ Admin and Employee dashboard interfaces  
+- ✅ Complete Product management (CRUD operations)
+- ✅ Full Employee management system (Admin only)
+- ✅ Comprehensive Supplier management
+- ✅ Stock management functionality
+- ✅ Business reporting for products, employees, and suppliers
 
-Manage Products, Suppliers, and Orders (limited access)
+### 🔄 **In Progress:**
+- 🔄 Order management system (UI completed, backend functionality being refined)
+- 🔄 Order processing workflow optimization
 
-Simpler UI designed for store-level tasks
+### 🔜 **Upcoming Features:**
+- 🔜 Order bill generation system
+- 🔜 Hibernate integration for enhanced database operations
+- 🔜 Jasper Reports integration for professional printable reports
+- 🔜 Advanced inventory tracking and alerts
 
-⚙️ Technologies Used
+## 📸 **Application Screenshots**
 
-Java 
+*Main Dashboard*
+![Main Dashboard](https://github.com/user-attachments/assets/ba27e1f3-bd09-41cc-be90-3584fb31dce1)
 
-JavaFX (UI)
+*Admin Dashboard - Complete management interface*
+![Admin Login Page](https://github.com/user-attachments/assets/a90eaa33-b4c8-49f2-b96e-f123cafadb61)
 
-OOP (Object-Oriented Programming)
+*Product Table*
+![Product Table](https://github.com/user-attachments/assets/31851962-e95d-41e8-8d0d-aea8af0b3d65)
 
-Layered Architecture
+*Employee Table*
+![Employee Table](https://github.com/user-attachments/assets/be381741-d608-4fc3-a375-358cc626ce15)
 
-[Hibernate, Jasper Reports – planned features]
+*Order Table*
+![Order Page](https://github.com/user-attachments/assets/7c7b8586-2102-470c-94d1-41c393f25959)
 
-📌 Current Status
+*Supplier Table*
+![Supplier Table](https://github.com/user-attachments/assets/a11c99a5-a76a-42d6-ab2c-c96dc116d183)
 
-✅ Login system – complete
+*Supplier Report*
+![Supplier Report](https://github.com/user-attachments/assets/11fdea95-d991-4742-a34b-cb84a7787377)
 
-✅ Product, Employee, Supplier management – complete
+*Employee Report*
+![Employee Report](https://github.com/user-attachments/assets/f8479dd8-98e9-4d38-af09-b5dca1183f63)
 
-🔄 Order module – UI ready, functionality in progress
-
-🔜 Future plan: Add Hibernate for DB integration and Jasper Reports for printable reports
-
-📸 Screenshots
-![image](https://github.com/user-attachments/assets/b3df44ed-4ad9-4034-b410-1bfeb45c55ac) - admin dashboard
-![image](https://github.com/user-attachments/assets/5e473d12-3387-4050-aa92-26d98528f04a) - employee dashboard
-![image](https://github.com/user-attachments/assets/a881cc5a-b669-4156-a6c6-6c2e49800153) - login form
-
-🛠️ How to Run
-
-Clone this repo:
-
-git clone (https://github.com/Niveka1998/3xl-clothify-store.git)  (in master branch)
-
-cd clothify
-
-Open in your IDE (e.g., IntelliJ IDEA or Eclipse)
-
-Make sure JavaFX SDK is configured
-
-Run Main.java
-
-🤝 Contributions
-
-This is a personal learning project. If you'd like to suggest improvements or contribute, feel free to fork and submit a PR.
+*Products Report*
+![Product Report](https://github.com/user-attachments/assets/6853b584-5d8b-4dd2-aa2a-cc548c656d09)
 
 
-📬 Contact
 
-📧 pereraniveka@gmail.com
 
-📍 Sri Lanka
+
+## 🛠️ **Installation & Setup**
+
+### **Prerequisites:**
+- Java Development Kit (JDK 8 or higher)
+- JavaFX SDK properly configured
+- IDE (IntelliJ IDEA, Eclipse, or similar)
+
+### **Steps to Run:**
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/Niveka1998/3xl-clothify-store.git
+   cd clothify
+   ```
+
+2. **Open in your IDE:**
+   - Import the project in IntelliJ IDEA or Eclipse
+   - Ensure JavaFX SDK is properly configured in your project settings
+
+3. **Run the application:**
+   - Execute `Main.java` to start the application
+   - Use the login interface to access Admin or Employee dashboards
+
+## 🎯 **Learning Outcomes**
+
+This project enhanced my skills in:
+- Desktop application development with JavaFX
+- Implementing clean architecture patterns
+- Role-based access control systems
+- Database design and management
+- User interface design for business applications
+- Object-oriented programming principles
+
+## 🤝 **Contributing**
+
+This is a personal learning project, but I welcome suggestions and improvements! Feel free to:
+- Fork the repository
+- Create a feature branch
+- Submit a pull request with your enhancements
+
+## 📬 **Contact Information**
+
+- 📧 **Email**: pereraniveka@gmail.com
+- 📍 **Location**: Sri Lanka
+- 💼 **GitHub**: [Niveka1998](https://github.com/Niveka1998)
+
+---
+
+⭐ **If you find this project helpful, please consider giving it a star!** ⭐
